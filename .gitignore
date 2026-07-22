@@ -15,7 +15,6 @@ htmlcov/
 !.env.example
 
 # IDE / OS
-.vscode/
 .idea/
 .DS_Store
 
@@ -43,3 +42,8 @@ postgres_data/
 # Build
 build/
 dist/
+
+# VSCode: versionar apenas configurações compartilhadas
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
