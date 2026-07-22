@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Private or generated data
+data/private/**
+!data/private/.gitkeep
+uploads/
+exports/
+logs/**
+!logs/.gitkeep
+*.db
+*.sqlite
+*.sqlite3
+
+# Real documents: blocked by default
+*.pdf
+*.docx
+*.xlsx
+*.xls
+*.csv
+
+# Containers / local volumes
+postgres_data/
+
+# Build
+build/
+dist/
