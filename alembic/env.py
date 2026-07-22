@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from logging.config import fileConfig
 
-from alembic import context
 from sqlalchemy import engine_from_config, pool
 
+from alembic import context
 from merit_assistant.config.settings import get_settings
-from merit_assistant.infrastructure.db.base import Base
 from merit_assistant.infrastructure.db import models  # noqa: F401
+from merit_assistant.infrastructure.db.base import Base
 
 config = context.config
 if config.config_file_name is not None:

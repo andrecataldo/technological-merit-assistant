@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Annotated
 from uuid import uuid4
 
 from fastapi import Depends, FastAPI, HTTPException, status
@@ -22,6 +23,8 @@ from merit_assistant.profiles.loader import ProfileMetadata, load_profile
 settings = get_settings()
 app = FastAPI(title=settings.app_name, version="0.1.0")
 PROFILE_PATH = Path("config/profiles/finep_mais_inovacao_tecnologias_digitais/profile.yaml")
+
+DatabaseSession = Annotated[Session, Depends(get_db_session)]
 
 
 def configured_profile() -> ProfileMetadata:
@@ -49,7 +52,7 @@ def list_profiles() -> list[ProfileResponse]:
 )
 def create_evaluation(
     payload: EvaluationCreate,
-    session: Session = Depends(get_db_session),
+    session: DatabaseSession,
 ) -> EvaluationResponse:
     profile = configured_profile()
     if payload.profile_id != profile.id:
@@ -75,7 +78,7 @@ def create_evaluation(
 
 @app.get("/evaluations", response_model=list[EvaluationResponse])
 def list_evaluations(
-    session: Session = Depends(get_db_session),
+    session: DatabaseSession,
 ) -> list[EvaluationResponse]:
     evaluations = session.scalars(
         select(EvaluationModel).order_by(EvaluationModel.created_at.desc())
