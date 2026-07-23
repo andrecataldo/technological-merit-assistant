@@ -6,7 +6,7 @@
 - **Feature pai:** F01 — Ingestão Segura de Documentos
 - **Autor — Human Lead Engineer:** André Cataldo
 - **Data:** 2026-07-22
-- **Status:** Approved
+- **Status:** Done
 - **MCP+ aplicável:** MCP+ 001 v1.1
 - **Issue:** não definida
 
@@ -54,24 +54,24 @@ Criar:
 
 ### 4.1 Dentro do escopo — IN
 
-- [ ] Criar a entidade de domínio `Document`.
-- [ ] Criar o modelo SQLAlchemy `DocumentModel`.
-- [ ] Criar a tabela `documents`.
-- [ ] Associar cada documento a uma avaliação existente.
-- [ ] Usar UUID como identificador do documento.
-- [ ] Registrar o nome original do arquivo.
-- [ ] Registrar uma chave relativa de armazenamento.
-- [ ] Registrar o MIME type declarado.
-- [ ] Registrar o tamanho do arquivo em bytes.
-- [ ] Registrar o hash SHA-256.
-- [ ] Registrar a data de criação.
-- [ ] Impedir hash duplicado dentro da mesma avaliação.
-- [ ] Permitir o mesmo hash em avaliações diferentes.
-- [ ] Impedir tamanho igual ou inferior a zero.
-- [ ] Exigir SHA-256 com 64 caracteres.
-- [ ] Tornar a chave de armazenamento única.
-- [ ] Criar migration Alembic reversível.
-- [ ] Criar testes automatizados.
+- [x] Criar a entidade de domínio `Document`.
+- [x] Criar o modelo SQLAlchemy `DocumentModel`.
+- [x] Criar a tabela `documents`.
+- [x] Associar cada documento a uma avaliação existente.
+- [x] Usar UUID como identificador do documento.
+- [x] Registrar o nome original do arquivo.
+- [x] Registrar uma chave relativa de armazenamento.
+- [x] Registrar o MIME type declarado.
+- [x] Registrar o tamanho do arquivo em bytes.
+- [x] Registrar o hash SHA-256.
+- [x] Registrar a data de criação.
+- [x] Impedir hash duplicado dentro da mesma avaliação.
+- [x] Permitir o mesmo hash em avaliações diferentes.
+- [x] Impedir tamanho igual ou inferior a zero.
+- [x] Exigir SHA-256 com 64 caracteres.
+- [x] Tornar a chave de armazenamento única.
+- [x] Criar migration Alembic reversível.
+- [x] Criar testes automatizados.
 
 ### 4.2 Fora do escopo — OUT
 
@@ -153,28 +153,28 @@ Criar:
 
 ### 7.1 Funcionais
 
-- [ ] A entidade de domínio `Document` foi criada.
-- [ ] O modelo SQLAlchemy corresponde ao modelo definido neste documento.
-- [ ] A tabela `documents` é criada pela migration.
-- [ ] `evaluation_id` referencia `evaluations.id`.
-- [ ] A exclusão de uma avaliação elimina seus documentos.
-- [ ] Existe unicidade para `(evaluation_id, sha256)`.
-- [ ] `storage_key` possui unicidade.
-- [ ] Existe restrição para `size_bytes > 0`.
-- [ ] Existe restrição para SHA-256 com 64 caracteres.
-- [ ] Upgrade e downgrade funcionam.
-- [ ] O downgrade remove somente a tabela criada nesta feature.
+- [x] A entidade de domínio `Document` foi criada.
+- [x] O modelo SQLAlchemy corresponde ao modelo definido neste documento.
+- [x] A tabela `documents` é criada pela migration.
+- [x] `evaluation_id` referencia `evaluations.id`.
+- [x] A exclusão de uma avaliação elimina seus documentos.
+- [x] Existe unicidade para `(evaluation_id, sha256)`.
+- [x] `storage_key` possui unicidade.
+- [x] Existe restrição para `size_bytes > 0`.
+- [x] Existe restrição para SHA-256 com 64 caracteres.
+- [x] Upgrade e downgrade funcionam.
+- [x] O downgrade remove somente a tabela criada nesta feature.
 
 ### 7.2 Técnicos
 
-- [ ] Testes automatizados criados ou atualizados.
-- [ ] Nenhuma regressão nos testes existentes.
-- [ ] `pytest` aprovado.
-- [ ] `ruff check .` aprovado.
-- [ ] `mypy src` aprovado.
-- [ ] `verify_i001_scope.sh` aprovado.
-- [ ] Nenhuma dependência nova.
-- [ ] Nenhum PDF ou dado real incluído no Git.
+- [x] Testes automatizados criados ou atualizados.
+- [x] Nenhuma regressão nos testes existentes.
+- [x] `pytest` aprovado.
+- [x] `ruff check .` aprovado.
+- [x] `mypy src` aprovado.
+- [x] `verify_i001_scope.sh` aprovado.
+- [x] Nenhuma dependência nova.
+- [x] Nenhum PDF ou dado real incluído no Git.
 
 ---
 
@@ -287,6 +287,52 @@ O rollback deve remover exclusivamente a tabela `documents`.
 - preservar integralmente os Decision Locks.
 
 ---
+
+## 12. Registro de Conclusão
+
+- **Status final:** Done
+- **Data da conclusão:** 2026-07-22
+- **Migration criada:** `0002_add_documents`
+- **Revisão anterior:** `0001_initial`
+- **Responsável pela validação:** André Cataldo
+
+### Evidências
+
+- entidade de domínio `Document` criada;
+- modelo SQLAlchemy `DocumentModel` criado;
+- tabela PostgreSQL `documents` criada;
+- foreign key para `evaluations.id` validada;
+- `ON DELETE CASCADE` validado no PostgreSQL;
+- unicidade de `(evaluation_id, sha256)` validada;
+- unicidade global de `storage_key` validada;
+- check de `size_bytes > 0` validado;
+- check de SHA-256 com 64 caracteres validado;
+- upgrade para `0002_add_documents` aprovado;
+- downgrade para `0001_initial` aprovado;
+- tabelas anteriores preservadas;
+- novo upgrade para `0002_add_documents` aprovado;
+- testes automatizados aprovados;
+- Ruff aprovado;
+- mypy aprovado;
+- verificador de escopo I-001 aprovado;
+- aplicação reiniciada e endpoint `/health` aprovado;
+- nenhum documento real ou dado privado incluído no Git.
+
+### Desvios
+
+Nenhum desvio de escopo identificado.
+
+### Itens deliberadamente não implementados
+
+- upload de documentos;
+- gravação física de arquivos;
+- endpoints documentais;
+- interface Streamlit para documentos;
+- validação real de PDFs;
+- cálculo efetivo de SHA-256;
+- extração de texto;
+- OCR;
+- páginas, embeddings, RAG ou LLM.
 
 ## Aprovação
 
