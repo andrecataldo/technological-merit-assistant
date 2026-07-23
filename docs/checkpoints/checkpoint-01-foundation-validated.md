@@ -64,3 +64,17 @@ A implementação deve continuar sob o MCP+ 001 e interromper caso:
 - documentos sejam enviados externamente;
 - seja necessário alterar um Decision Lock;
 - a rastreabilidade documental não possa ser preservada.
+
+## Alertas conhecidos
+
+### W-001 — Depreciação do cliente de testes
+
+O pytest emite `StarletteDeprecationWarning` informando que o uso de
+`httpx` pelo `starlette.testclient` será substituído por `httpx2`.
+
+- Origem: dependências FastAPI/Starlette;
+- Impacto atual: nenhum;
+- Testes afetados: nenhum;
+- Decisão: manter o `TestClient` atual;
+- Tratamento: revisar em futura atualização coordenada das dependências;
+- Classificação: aceito, não bloqueante.
