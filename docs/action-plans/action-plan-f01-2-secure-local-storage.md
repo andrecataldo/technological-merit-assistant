@@ -11,7 +11,7 @@
 - **Branch:** `feature/f01-secure-document-ingestion`
 - **Data:** 2026-07-23
 - **Responsável humano:** André Cataldo
-- **Status:** Approved
+- **Status:** Done
 
 ---
 
@@ -132,7 +132,21 @@ mypy src
 ./scripts/verify_i001_scope.sh
 ```
 
-**Status:** Pending
+**Resultado**
+
+- branch correta confirmada;
+- working tree limpo;
+- artefatos de governança presentes;
+- suíte de testes aprovada;
+- Ruff aprovado;
+- mypy aprovado;
+- verificador I-001 aprovado;
+- PostgreSQL operacional;
+- banco mantido em `0002_add_documents`;
+- API operacional;
+- endpoint `/health` aprovado.
+
+**Status:** Concluída
 
 ---
 
@@ -190,7 +204,17 @@ mypy \
   src/merit_assistant/application/ports/document_storage.py
 ```
 
-**Status:** Pending
+**Resultado**
+
+- contrato `DocumentStorage` criado;
+- operações `store`, `open_binary` e `delete` definidas;
+- exceção-base `DocumentStorageError` criada;
+- exceção `UnsafeStoragePathError` criada;
+- exceção `DocumentAlreadyExistsError` criada;
+- contrato sem dependência de infraestrutura concreta;
+- compilação, Ruff e mypy aprovados.
+
+**Status:** Concluída
 
 ---
 
@@ -240,7 +264,26 @@ ruff check \
 mypy src/merit_assistant/infrastructure/storage
 ```
 
-**Status:** Pending
+**Resultado**
+
+- `LocalDocumentStorage` criado;
+- raiz privada recebida por injeção explícita;
+- construção por `Settings.private_data_dir` implementada;
+- `storage_key` gerada exclusivamente com UUIDs internos;
+- chave mantida em formato POSIX relativo;
+- estrutura canônica da chave validada;
+- caminhos absolutos rejeitados;
+- segmentos `..` rejeitados;
+- estruturas não canônicas rejeitadas;
+- identificadores UUID inválidos rejeitados;
+- raiz configurada como symlink rejeitada;
+- componentes de caminho com symlink rejeitados;
+- confinamento à raiz privada validado;
+- diretórios criados com permissão `0700`;
+- 19 testes específicos aprovados;
+- Ruff e mypy aprovados.
+
+**Status:** Concluída
 
 ---
 
@@ -286,7 +329,22 @@ pytest tests/test_local_document_storage.py \
   -k "store or atomic or overwrite or partial or cleanup or chunk" -v
 ```
 
-**Status:** Pending
+**Resultado**
+
+- `store()` implementado;
+- conteúdo binário gravado em blocos;
+- arquivo temporário criado no diretório final;
+- arquivo temporário configurado com permissão `0600`;
+- `flush()` e `fsync()` executados antes da publicação;
+- publicação realizada sem substituir destino existente;
+- sobrescrita rejeitada por `DocumentAlreadyExistsError`;
+- conteúdo original preservado após tentativa duplicada;
+- falhas durante a leitura não deixam arquivo final parcial;
+- arquivos temporários removidos após falha;
+- 23 testes específicos aprovados;
+- Ruff e mypy aprovados.
+
+**Status:** Concluída
 
 ---
 
@@ -326,7 +384,25 @@ pytest tests/test_local_document_storage.py \
   -k "open or read or delete" -v
 ```
 
-**Status:** Pending
+**Resultado**
+
+- `open_binary()` implementado;
+- arquivos abertos exclusivamente em modo binário de leitura;
+- descritor protegido com `O_NOFOLLOW`;
+- leitura de arquivo inexistente propaga `FileNotFoundError`;
+- `delete()` implementado;
+- exclusão de arquivo existente retorna `True`;
+- exclusão repetida retorna `False`;
+- diretórios superiores são preservados;
+- caminhos absolutos e segmentos `..` são rejeitados;
+- symlink documental é rejeitado na leitura;
+- symlink documental é rejeitado na exclusão;
+- alvo externo de symlink permanece preservado;
+- 12 testes específicos de leitura e exclusão aprovados;
+- 35 testes totais do armazenamento aprovados;
+- Ruff e mypy aprovados.
+
+**Status:** Concluída
 
 ---
 
@@ -387,7 +463,31 @@ mypy src
 git diff --check
 ```
 
-**Status:** Pending
+**Resultado**
+
+- suíte de segurança consolidada com conteúdo exclusivamente sintético;
+- contrato `DocumentStorage` validado por tipagem estrutural;
+- `LocalDocumentStorage` confirmado como implementação compatível com o contrato;
+- geração canônica de `storage_key` validada;
+- confinamento à raiz privada validado;
+- tentativa de escrita por symlink externo rejeitada;
+- nenhum arquivo criado fora da raiz privada;
+- gravação em blocos validada;
+- publicação sem sobrescrita validada;
+- arquivo original preservado após tentativa duplicada;
+- falhas não deixam arquivo final parcial;
+- arquivos temporários são removidos após falha;
+- permissões `0700` e `0600` validadas;
+- leitura binária somente leitura validada;
+- exclusão idempotente validada;
+- path traversal, caminhos não canônicos e UUIDs inválidos rejeitados;
+- symlinks na raiz, nos diretórios e no arquivo rejeitados;
+- 37 testes específicos aprovados;
+- Ruff aprovado;
+- mypy aprovado em código e testes;
+- `git diff --check` aprovado.
+
+**Status:** Concluída
 
 ---
 
@@ -401,26 +501,26 @@ Após as Etapas 2 a 6 e antes do Quality Gate completo.
 
 **Itens para revisão**
 
-- [ ] O contrato não depende de infraestrutura concreta.
-- [ ] A implementação usa a raiz configurada.
-- [ ] A chave contém apenas UUIDs internos.
-- [ ] O nome original não participa do caminho.
-- [ ] Caminhos absolutos são rejeitados.
-- [ ] Segmentos `..` são rejeitados.
-- [ ] Symlinks capazes de escapar da raiz são rejeitados.
-- [ ] A gravação ocorre em blocos.
-- [ ] O arquivo temporário fica no mesmo diretório do destino.
-- [ ] A publicação final é atômica.
-- [ ] Arquivo existente não é sobrescrito.
-- [ ] Falhas não deixam arquivo final parcial.
-- [ ] Falhas removem arquivos temporários.
-- [ ] Arquivos usam permissão `0600`.
-- [ ] Diretórios usam permissão `0700`.
-- [ ] Leitura usa somente modo binário.
-- [ ] Exclusão é idempotente.
-- [ ] Nenhum conteúdo aparece em logs.
-- [ ] Nenhum endpoint, banco ou validação de PDF foi introduzido.
-- [ ] Nenhuma dependência nova foi adicionada.
+- [x] O contrato não depende de infraestrutura concreta.
+- [x] A implementação usa a raiz configurada.
+- [x] A chave contém apenas UUIDs internos.
+- [x] O nome original não participa do caminho.
+- [x] Caminhos absolutos são rejeitados.
+- [x] Segmentos `..` são rejeitados.
+- [x] Symlinks capazes de escapar da raiz são rejeitados.
+- [x] A gravação ocorre em blocos.
+- [x] O arquivo temporário fica no mesmo diretório do destino.
+- [x] A publicação final é atômica.
+- [x] Arquivo existente não é sobrescrito.
+- [x] Falhas não deixam arquivo final parcial.
+- [x] Falhas removem arquivos temporários.
+- [x] Arquivos usam permissão `0600`.
+- [x] Diretórios usam permissão `0700`.
+- [x] Leitura usa somente modo binário.
+- [x] Exclusão é idempotente.
+- [x] Nenhum conteúdo aparece em logs.
+- [x] Nenhum endpoint, banco ou validação de PDF foi introduzido.
+- [x] Nenhuma dependência nova foi adicionada.
 
 **Evidências**
 
@@ -433,9 +533,22 @@ git diff -- \
 pytest tests/test_local_document_storage.py -v
 ```
 
-**Status:** Pending  
-**Aprovado por:** pendente  
-**Data:** pendente
+**Status:** Approved
+**Aprovado por:** André Cataldo
+**Data:** 2026-07-23
+
+**Risco residual aceito**
+
+Permanece o risco residual de condição de corrida entre validação e operação
+baseada em caminho no sistema de arquivos. O risco é considerado aceitável para
+este incremento porque:
+
+- a execução ocorre em ambiente Ubuntu local;
+- a raiz privada possui permissão `0700`;
+- não há processamento externo;
+- symlinks são rejeitados;
+- a publicação não substitui arquivos existentes;
+- os testes comprovaram ausência de escrita fora da raiz.
 
 **Condição de saída**
 
@@ -489,7 +602,24 @@ docs/features/feature-intent-f01-2-secure-local-storage.md
 docs/action-plans/action-plan-f01-2-secure-local-storage.md
 ```
 
-**Status:** Pending
+**Resultado**
+
+- suíte completa aprovada com 57 testes;
+- warning preexistente e não bloqueante identificado;
+- Ruff aprovado;
+- mypy aprovado;
+- verificador de escopo I-001 aprovado;
+- `git diff --check` aprovado;
+- banco mantido em `0002_add_documents`;
+- PostgreSQL saudável;
+- API e UI operacionais;
+- endpoint `/health` aprovado;
+- processamento externo mantido desativado;
+- superfície da mudança compatível com o plano;
+- nenhum documento real ou arquivo privado rastreado pelo Git;
+- nenhuma expansão de escopo identificada.
+
+**Status:** Concluída
 
 ---
 
@@ -503,18 +633,26 @@ Após o Quality Gate e antes do encerramento formal.
 
 **Itens para revisão**
 
-- [ ] Todos os testes foram aprovados.
-- [ ] Ruff foi aprovado.
-- [ ] mypy foi aprovado.
-- [ ] O verificador I-001 foi aprovado.
-- [ ] Não existem arquivos temporários rastreados.
-- [ ] Não existem documentos reais no Git.
-- [ ] A superfície da mudança corresponde ao plano.
-- [ ] Nenhum arquivo de banco foi alterado.
-- [ ] Nenhum endpoint foi alterado.
-- [ ] Nenhuma interface foi alterada.
-- [ ] Nenhuma expansão de escopo foi identificada.
-- [ ] O Feature Intent continua atendido integralmente.
+- [x] Todos os 57 testes foram aprovados.
+- [x] Os 37 testes específicos de armazenamento foram aprovados.
+- [x] Ruff foi aprovado.
+- [x] mypy foi aprovado.
+- [x] O verificador I-001 foi aprovado.
+- [x] `git diff --check` foi aprovado.
+- [x] PostgreSQL permanece saudável.
+- [x] Alembic permanece em `0002_add_documents`.
+- [x] API e UI permanecem operacionais.
+- [x] O endpoint `/health` foi aprovado.
+- [x] O contrato permanece independente da infraestrutura.
+- [x] A gravação é confinada à raiz privada.
+- [x] A publicação não sobrescreve arquivos existentes.
+- [x] Falhas não deixam arquivo parcial ou temporário.
+- [x] Path traversal e symlinks inseguros são rejeitados.
+- [x] Nenhum endpoint, banco ou interface foi alterado.
+- [x] Nenhuma dependência foi adicionada.
+- [x] Nenhum documento real ou arquivo privado foi versionado.
+- [x] Nenhuma expansão de escopo foi identificada.
+- [x] O Feature Intent F01.2 permanece integralmente atendido.
 
 **Evidências**
 
@@ -528,9 +666,9 @@ mypy src
 ./scripts/verify_i001_scope.sh
 ```
 
-**Status:** Pending  
-**Aprovado por:** pendente  
-**Data:** pendente
+**Status:** Approved
+**Aprovado por:** André Cataldo
+**Data:** 2026-07-23
 
 **Condição de saída**
 
@@ -572,7 +710,17 @@ git commit -m "feat: add secure local document storage"
 git push origin feature/f01-secure-document-ingestion
 ```
 
-**Status:** Pending
+**Resultado**
+
+- Feature Intent F01.2 atualizado para `Done`;
+- Action Plan F01.2 atualizado para `Done`;
+- critérios de aceite marcados conforme as evidências;
+- checkpoints H1 e H2 registrados;
+- Quality Gate aprovado;
+- implementação preparada para commit e push;
+- nenhum desvio ou expansão de escopo identificado.
+
+**Status:** Concluída
 
 ---
 
@@ -694,7 +842,23 @@ Interromper imediatamente se:
 
 ---
 
-## 7. Aprovação
+## 7. Registro de Conclusão
+
+- **Status final:** Done
+- **Data da conclusão:** 2026-07-23
+- **Checkpoint H1:** Approved
+- **Checkpoint H2:** Approved
+- **Quality Gate:** Approved
+- **Testes específicos:** 37 aprovados
+- **Suíte completa:** 57 aprovados
+- **Desvios registrados:** nenhum
+- **Expansão de escopo:** nenhuma
+
+O F01.2 foi implementado, validado e autorizado para registro definitivo.
+
+---
+
+## 8. Aprovação
 
 - [x] **Human Lead Engineer aprovou este Action Plan**
 - **Data da aprovação:** 2026-07-23

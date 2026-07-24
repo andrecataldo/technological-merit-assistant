@@ -6,7 +6,7 @@
 - **Feature pai:** F01 — Ingestão Segura de Documentos
 - **Autor — Human Lead Engineer:** André Cataldo
 - **Data:** 2026-07-23
-- **Status:** Approved
+- **Status:** Done
 - **MCP+ aplicável:** MCP+ 001 v1.1
 - **Dependência:** F01.1 — Modelo de Documento e Migration
 
@@ -50,27 +50,27 @@ Criar um serviço local de armazenamento capaz de:
 
 ### 4.1 Dentro do escopo — IN
 
-- [ ] Criar o contrato `DocumentStorage`.
-- [ ] Criar a implementação `LocalDocumentStorage`.
-- [ ] Usar `Settings.private_data_dir` como raiz do armazenamento.
-- [ ] Gerar `storage_key` usando somente UUIDs internos.
-- [ ] Usar o formato:
+- [x] Criar o contrato `DocumentStorage`.
+- [x] Criar a implementação `LocalDocumentStorage`.
+- [x] Usar `Settings.private_data_dir` como raiz do armazenamento.
+- [x] Gerar `storage_key` usando somente UUIDs internos.
+- [x] Usar o formato:
       `evaluations/{evaluation_id}/documents/{document_id}.pdf`.
-- [ ] Manter `storage_key` como caminho POSIX relativo.
-- [ ] Criar diretórios privados quando necessário.
-- [ ] Gravar conteúdo binário em blocos.
-- [ ] Utilizar arquivo temporário no mesmo diretório do destino.
-- [ ] Publicar o arquivo final de forma atômica.
-- [ ] Impedir sobrescrita de arquivo existente.
-- [ ] Remover arquivo temporário em caso de erro.
-- [ ] Configurar diretórios com permissão `0700`.
-- [ ] Configurar arquivos com permissão `0600`.
-- [ ] Permitir abertura binária somente para leitura.
-- [ ] Permitir exclusão idempotente de arquivo armazenado.
-- [ ] Rejeitar caminhos absolutos.
-- [ ] Rejeitar segmentos `..`.
-- [ ] Rejeitar caminhos que escapem da raiz por symlink.
-- [ ] Criar testes automatizados com dados sintéticos.
+- [x] Manter `storage_key` como caminho POSIX relativo.
+- [x] Criar diretórios privados quando necessário.
+- [x] Gravar conteúdo binário em blocos.
+- [x] Utilizar arquivo temporário no mesmo diretório do destino.
+- [x] Publicar o arquivo final de forma atômica.
+- [x] Impedir sobrescrita de arquivo existente.
+- [x] Remover arquivo temporário em caso de erro.
+- [x] Configurar diretórios com permissão `0700`.
+- [x] Configurar arquivos com permissão `0600`.
+- [x] Permitir abertura binária somente para leitura.
+- [x] Permitir exclusão idempotente de arquivo armazenado.
+- [x] Rejeitar caminhos absolutos.
+- [x] Rejeitar segmentos `..`.
+- [x] Rejeitar caminhos que escapem da raiz por symlink.
+- [x] Criar testes automatizados com dados sintéticos.
 
 ### 4.2 Fora do escopo — OUT
 
@@ -176,34 +176,34 @@ O contrato deverá expor operações equivalentes a:
 
 ### 9.1 Funcionais
 
-- [ ] O contrato `DocumentStorage` foi criado.
-- [ ] `LocalDocumentStorage` implementa o contrato.
-- [ ] A raiz vem de `Settings.private_data_dir`.
-- [ ] A chave segue o formato aprovado.
-- [ ] O arquivo é gravado dentro da raiz privada.
-- [ ] O conteúdo armazenado permanece íntegro.
-- [ ] O nome original não participa do caminho físico.
-- [ ] A gravação final é atômica.
-- [ ] Arquivo existente não é sobrescrito.
-- [ ] Arquivos temporários são removidos após erro.
-- [ ] Leitura binária funciona.
-- [ ] Exclusão funciona de forma idempotente.
-- [ ] Path traversal é rejeitado.
-- [ ] Escape por symlink é rejeitado.
-- [ ] Permissões de arquivo e diretório são restritivas.
+- [x] O contrato `DocumentStorage` foi criado.
+- [x] `LocalDocumentStorage` implementa o contrato.
+- [x] A raiz vem de `Settings.private_data_dir`.
+- [x] A chave segue o formato aprovado.
+- [x] O arquivo é gravado dentro da raiz privada.
+- [x] O conteúdo armazenado permanece íntegro.
+- [x] O nome original não participa do caminho físico.
+- [x] A gravação final é atômica.
+- [x] Arquivo existente não é sobrescrito.
+- [x] Arquivos temporários são removidos após erro.
+- [x] Leitura binária funciona.
+- [x] Exclusão funciona de forma idempotente.
+- [x] Path traversal é rejeitado.
+- [x] Escape por symlink é rejeitado.
+- [x] Permissões de arquivo e diretório são restritivas.
 
 ### 9.2 Técnicos
 
-- [ ] Testes usam apenas `tmp_path` e conteúdo sintético.
-- [ ] Nenhum PDF real é necessário.
-- [ ] Nenhuma dependência nova é adicionada.
-- [ ] Nenhum endpoint é criado.
-- [ ] Nenhum acesso ao PostgreSQL é realizado.
-- [ ] `pytest` é aprovado.
-- [ ] `ruff check .` é aprovado.
-- [ ] `mypy src` é aprovado.
-- [ ] `verify_i001_scope.sh` é aprovado.
-- [ ] Nenhum arquivo privado é incluído no Git.
+- [x] Testes usam apenas `tmp_path` e conteúdo sintético.
+- [x] Nenhum PDF real é necessário.
+- [x] Nenhuma dependência nova é adicionada.
+- [x] Nenhum endpoint é criado.
+- [x] Nenhum acesso ao PostgreSQL é realizado.
+- [x] `pytest` é aprovado.
+- [x] `ruff check .` é aprovado.
+- [x] `mypy src` é aprovado.
+- [x] `verify_i001_scope.sh` é aprovado.
+- [x] Nenhum arquivo privado é incluído no Git.
 
 ---
 
@@ -286,6 +286,71 @@ Os testes deverão comprovar:
 - não adicionar dependências;
 - não usar nome original no caminho;
 - interromper em caso de conflito com artefato superior.
+
+---
+
+## 14. Registro de Conclusão
+
+- **Status final:** Done
+- **Data da conclusão:** 2026-07-23
+- **Responsável pela validação:** André Cataldo
+- **Checkpoint H1:** Approved
+- **Checkpoint H2:** Approved
+- **Quality Gate:** Approved
+
+### Evidências
+
+- contrato `DocumentStorage` criado;
+- implementação `LocalDocumentStorage` criada;
+- raiz obtida por `Settings.private_data_dir`;
+- chave de armazenamento gerada somente com UUIDs internos;
+- chave mantida em formato POSIX relativo;
+- gravação binária executada em blocos;
+- arquivo temporário criado no diretório final;
+- `flush()` e `fsync()` executados antes da publicação;
+- publicação atômica sem sobrescrita;
+- arquivo original preservado após tentativa duplicada;
+- falhas não deixam arquivo final parcial;
+- arquivos temporários são removidos após falha;
+- arquivos configurados com permissão `0600`;
+- diretórios configurados com permissão `0700`;
+- leitura binária somente leitura implementada;
+- exclusão idempotente implementada;
+- caminhos absolutos e segmentos `..` rejeitados;
+- estruturas não canônicas e UUIDs inválidos rejeitados;
+- symlinks inseguros rejeitados;
+- escrita fora da raiz privada impedida;
+- 37 testes específicos aprovados;
+- 57 testes totais aprovados;
+- Ruff aprovado;
+- mypy aprovado;
+- verificador I-001 aprovado;
+- banco mantido em `0002_add_documents`;
+- endpoint `/health` aprovado;
+- nenhum documento real ou arquivo privado versionado.
+
+### Risco residual aceito
+
+Permanece o risco residual de condição de corrida entre validação e operação
+baseada em caminho. O risco foi aceito para o ambiente Ubuntu local e privado
+desta iteração.
+
+### Desvios
+
+Nenhum desvio de escopo identificado.
+
+### Itens deliberadamente não implementados
+
+- validação de PDF;
+- validação de MIME type;
+- limite máximo de tamanho;
+- cálculo de SHA-256;
+- persistência no PostgreSQL;
+- endpoints;
+- interface Streamlit;
+- extração de texto;
+- OCR;
+- armazenamento externo.
 
 ---
 
