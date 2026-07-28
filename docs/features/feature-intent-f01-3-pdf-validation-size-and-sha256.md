@@ -6,7 +6,7 @@
 - **Feature pai:** F01 — Ingestão Segura de Documentos
 - **Autor — Human Lead Engineer:** André Cataldo
 - **Data:** 2026-07-27
-- **Status:** Approved
+- **Status:** Done
 - **MCP+ aplicável:** MCP+ 001 v1.1
 - **Dependências:**
   - F01.1 — Modelo de Documento e Migration;
@@ -60,58 +60,58 @@ Criar um serviço de validação documental capaz de:
 
 ### 4.1 Dentro do escopo — IN
 
-- [ ] Criar o contrato `PdfInspector`.
-- [ ] Criar a implementação local `PyMuPdfInspector`.
-- [ ] Criar o serviço `DocumentValidationService`.
-- [ ] Criar o resultado imutável `ValidatedDocumentMetadata`.
-- [ ] Receber `original_filename`, `declared_content_type` e `BinaryIO`.
-- [ ] Validar que o nome original não esteja vazio.
-- [ ] Rejeitar caracteres nulos no nome.
-- [ ] Rejeitar componentes de diretório no nome original.
-- [ ] Validar a extensão `.pdf` sem diferenciar maiúsculas de minúsculas.
-- [ ] Validar o MIME type declarado como `application/pdf`.
-- [ ] Rejeitar conteúdo vazio.
-- [ ] Obter o limite a partir de `Settings.max_upload_size_mb`.
-- [ ] Converter o limite configurado para bytes.
-- [ ] Ler o fluxo em blocos de tamanho controlado.
-- [ ] Interromper a leitura quando o limite for ultrapassado.
-- [ ] Aceitar arquivo cujo tamanho seja exatamente igual ao limite.
-- [ ] Calcular SHA-256 durante a leitura.
-- [ ] Retornar SHA-256 hexadecimal em letras minúsculas.
-- [ ] Validar a assinatura `%PDF-` no início do conteúdo.
-- [ ] Validar a estrutura do PDF com PyMuPDF.
-- [ ] Rejeitar PDF estruturalmente inválido.
-- [ ] Rejeitar documento sem páginas.
-- [ ] Restaurar o fluxo para a posição inicial após sucesso.
-- [ ] Restaurar o fluxo após falha de validação.
-- [ ] Rejeitar fluxo que não permita posicionamento.
-- [ ] Utilizar somente processamento local.
-- [ ] Criar testes exclusivamente com conteúdo sintético.
+- [x] Criar o contrato `PdfInspector`.
+- [x] Criar a implementação local `PyMuPdfInspector`.
+- [x] Criar o serviço `DocumentValidationService`.
+- [x] Criar o resultado imutável `ValidatedDocumentMetadata`.
+- [x] Receber `original_filename`, `declared_content_type` e `BinaryIO`.
+- [x] Validar que o nome original não esteja vazio.
+- [x] Rejeitar caracteres nulos no nome.
+- [x] Rejeitar componentes de diretório no nome original.
+- [x] Validar a extensão `.pdf` sem diferenciar maiúsculas de minúsculas.
+- [x] Validar o MIME type declarado como `application/pdf`.
+- [x] Rejeitar conteúdo vazio.
+- [x] Obter o limite a partir de `Settings.max_upload_size_mb`.
+- [x] Converter o limite configurado para bytes.
+- [x] Ler o fluxo em blocos de tamanho controlado.
+- [x] Interromper a leitura quando o limite for ultrapassado.
+- [x] Aceitar arquivo cujo tamanho seja exatamente igual ao limite.
+- [x] Calcular SHA-256 durante a leitura.
+- [x] Retornar SHA-256 hexadecimal em letras minúsculas.
+- [x] Validar a assinatura `%PDF-` no início do conteúdo.
+- [x] Validar a estrutura do PDF com PyMuPDF.
+- [x] Rejeitar PDF estruturalmente inválido.
+- [x] Rejeitar documento sem páginas.
+- [x] Restaurar o fluxo para a posição inicial após sucesso.
+- [x] Restaurar o fluxo após falha de validação.
+- [x] Rejeitar fluxo que não permita posicionamento.
+- [x] Utilizar somente processamento local.
+- [x] Criar testes exclusivamente com conteúdo sintético.
 
 ### 4.2 Fora do escopo — OUT
 
-- [ ] Armazenar definitivamente o arquivo.
-- [ ] Chamar `DocumentStorage.store()`.
-- [ ] Criar ou atualizar `DocumentModel`.
-- [ ] Persistir metadados no PostgreSQL.
-- [ ] Verificar duplicidade no banco.
-- [ ] Criar endpoint de upload.
-- [ ] Criar endpoint de download.
-- [ ] Criar endpoint de listagem.
-- [ ] Criar interface Streamlit.
-- [ ] Extrair texto.
-- [ ] Extrair imagens.
-- [ ] Executar OCR.
-- [ ] Renderizar páginas.
-- [ ] Criar registros de páginas.
-- [ ] Gerar embeddings.
-- [ ] Implementar RAG ou LLM.
-- [ ] Enviar conteúdo para serviço externo.
-- [ ] Implementar antivírus.
-- [ ] Implementar Content Disarm and Reconstruction.
-- [ ] Definir política completa para PDFs protegidos por senha.
-- [ ] Confiar exclusivamente no MIME type declarado.
-- [ ] Confiar exclusivamente na extensão do arquivo.
+- [x] Armazenar definitivamente o arquivo.
+- [x] Chamar `DocumentStorage.store()`.
+- [x] Criar ou atualizar `DocumentModel`.
+- [x] Persistir metadados no PostgreSQL.
+- [x] Verificar duplicidade no banco.
+- [x] Criar endpoint de upload.
+- [x] Criar endpoint de download.
+- [x] Criar endpoint de listagem.
+- [x] Criar interface Streamlit.
+- [x] Extrair texto.
+- [x] Extrair imagens.
+- [x] Executar OCR.
+- [x] Renderizar páginas.
+- [x] Criar registros de páginas.
+- [x] Gerar embeddings.
+- [x] Implementar RAG ou LLM.
+- [x] Enviar conteúdo para serviço externo.
+- [x] Implementar antivírus.
+- [x] Implementar Content Disarm and Reconstruction.
+- [x] Definir política completa para PDFs protegidos por senha.
+- [x] Confiar exclusivamente no MIME type declarado.
+- [x] Confiar exclusivamente na extensão do arquivo.
 
 ---
 
@@ -359,45 +359,45 @@ As mensagens de erro:
 
 ### 10.1 Funcionais
 
-- [ ] `ValidatedDocumentMetadata` foi criado.
-- [ ] `PdfInspector` foi criado.
-- [ ] `PyMuPdfInspector` implementa o contrato.
-- [ ] `DocumentValidationService` foi criado.
-- [ ] Nome original é validado.
-- [ ] Extensão `.pdf` é validada.
-- [ ] MIME type é validado e normalizado.
-- [ ] Arquivo vazio é rejeitado.
-- [ ] Limite configurado é aplicado durante a leitura.
-- [ ] Arquivo exatamente no limite é aceito.
-- [ ] Arquivo acima do limite é rejeitado.
-- [ ] SHA-256 é calculado durante a leitura.
-- [ ] Assinatura `%PDF-` é validada.
-- [ ] Estrutura PDF é validada localmente.
-- [ ] PDF sem páginas é rejeitado.
-- [ ] Metadados corretos são retornados.
-- [ ] Fluxo permanece aberto.
-- [ ] Fluxo é restaurado à posição zero.
-- [ ] Nenhum arquivo é armazenado definitivamente.
+- [x] `ValidatedDocumentMetadata` foi criado.
+- [x] `PdfInspector` foi criado.
+- [x] `PyMuPdfInspector` implementa o contrato.
+- [x] `DocumentValidationService` foi criado.
+- [x] Nome original é validado.
+- [x] Extensão `.pdf` é validada.
+- [x] MIME type é validado e normalizado.
+- [x] Arquivo vazio é rejeitado.
+- [x] Limite configurado é aplicado durante a leitura.
+- [x] Arquivo exatamente no limite é aceito.
+- [x] Arquivo acima do limite é rejeitado.
+- [x] SHA-256 é calculado durante a leitura.
+- [x] Assinatura `%PDF-` é validada.
+- [x] Estrutura PDF é validada localmente.
+- [x] PDF sem páginas é rejeitado.
+- [x] Metadados corretos são retornados.
+- [x] Fluxo permanece aberto.
+- [x] Fluxo é restaurado à posição zero.
+- [x] Nenhum arquivo é armazenado definitivamente.
 
 ### 10.2 Técnicos
 
-- [ ] O limite vem de `Settings.max_upload_size_mb`.
-- [ ] O processamento ocorre em blocos.
-- [ ] A leitura para ao ultrapassar o limite.
-- [ ] O inspector utiliza PyMuPDF já disponível no projeto.
-- [ ] Nenhuma dependência nova é adicionada.
-- [ ] Testes utilizam apenas conteúdo sintético.
-- [ ] PDFs de teste são gerados em tempo de execução.
-- [ ] Nenhum PDF real é incluído no repositório.
-- [ ] Nenhum endpoint é criado ou alterado.
-- [ ] Nenhuma migration é criada.
-- [ ] Nenhum acesso ao PostgreSQL é realizado.
-- [ ] Nenhum arquivo definitivo é criado em `data/private`.
-- [ ] `pytest` é aprovado.
-- [ ] `ruff check .` é aprovado.
-- [ ] `mypy src` é aprovado.
-- [ ] `verify_i001_scope.sh` é aprovado.
-- [ ] Nenhum arquivo privado é incluído no Git.
+- [x] O limite vem de `Settings.max_upload_size_mb`.
+- [x] O processamento ocorre em blocos.
+- [x] A leitura para ao ultrapassar o limite.
+- [x] O inspector utiliza PyMuPDF já disponível no projeto.
+- [x] Nenhuma dependência nova é adicionada.
+- [x] Testes utilizam apenas conteúdo sintético.
+- [x] PDFs de teste são gerados em tempo de execução.
+- [x] Nenhum PDF real é incluído no repositório.
+- [x] Nenhum endpoint é criado ou alterado.
+- [x] Nenhuma migration é criada.
+- [x] Nenhum acesso ao PostgreSQL é realizado.
+- [x] Nenhum arquivo definitivo é criado em `data/private`.
+- [x] `pytest` é aprovado.
+- [x] `ruff check .` é aprovado.
+- [x] `mypy src` é aprovado.
+- [x] `verify_i001_scope.sh` é aprovado.
+- [x] Nenhum arquivo privado é incluído no Git.
 
 ---
 
@@ -532,6 +532,20 @@ Os testes deverão comprovar:
 - interromper em caso de conflito com artefato superior.
 
 ---
+
+## Registro de Conclusão
+
+- **Data de conclusão:** 2026-07-27
+- **Commit de implementação:** 
+- **Resultado:** validação local de PDF, limite progressivo de tamanho,
+  SHA-256, inspeção estrutural e restauração do fluxo implementados.
+- **Testes específicos:** 67 aprovados.
+- **Quality Gate:** pytest, Ruff, mypy, verificador I-001 e
+   aprovados.
+- **Dados privados:** nenhum PDF real ou dado privado incluído no Git.
+
+---
+
 
 ## Aprovação
 

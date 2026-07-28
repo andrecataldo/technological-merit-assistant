@@ -862,7 +862,16 @@ git commit -m "feat: add PDF validation and SHA-256 inspection"
 git push origin feature/f01-secure-document-ingestion
 ```
 
-**Status:** Approved
+**Resultado**
+
+- implementação registrada no commit `b0203fc`;
+- commit enviado à branch remota;
+- Feature Intent atualizado para `Done`;
+- Action Plan atualizado para `Done`;
+- evidências técnicas e humanas registradas;
+- F01.3 concluído sem expansão de escopo.
+
+**Status:** Concluída
 
 ---
 
@@ -992,3 +1001,14 @@ Interromper imediatamente se:
 
 - [x] **Human Lead Engineer aprovou este Action Plan**
 - **Data da aprovação:** 2026-07-27
+
+## Registro de Conclusão
+
+- **Data de conclusão:** 2026-07-27
+- **Commit de implementação:**`b0203fc`
+- **Resultado:** validação local de PDF, limite progressivo de tamanho,
+  SHA-256, inspeção estrutural e restauração do fluxo implementados.
+- **Testes específicos:** 67 aprovados.
+- **Quality Gate:** pytest, Ruff, mypy, verificador I-001 e
+  `git diff --check` aprovados.
+- **Dados privados:** nenhum PDF real ou dado privado incluído no Git.
