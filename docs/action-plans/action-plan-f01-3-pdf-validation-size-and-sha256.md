@@ -131,10 +131,22 @@ base antes da implementação.
 
 Nenhum.
 
-**Resultado esperado**
+**Resultado**
 
-Execução iniciada com o F01.2 encerrado, repositório limpo e controles técnicos
-aprovados.
+- branch correta confirmada;
+- working tree limpo e sincronizado;
+- Feature Intent e Action Plan F01.3 presentes e aprovados;
+- F01.2 confirmado como concluído;
+- suíte de testes aprovada;
+- Ruff aprovado;
+- mypy aprovado;
+- verificador I-001 aprovado;
+- `git diff --check` aprovado;
+- PyMuPDF disponível;
+- PostgreSQL saudável;
+- banco mantido em `0002_add_documents`;
+- API e interface operacionais;
+- endpoint `/health` aprovado.
 
 **Verificação**
 
@@ -159,7 +171,7 @@ mypy src
 git diff --check
 ```
 
-**Status:** Approved
+**Status:** Concluída
 
 ---
 
@@ -185,6 +197,18 @@ class PdfInspector(Protocol):
 ```
 
 **Resultado previsto**
+
+- contrato `PdfInspector` criado sem dependência de PyMuPDF;
+- resultado imutável `ValidatedDocumentMetadata` criado;
+- resultado limitado aos quatro campos aprovados;
+- invariantes de tamanho e SHA-256 implementadas;
+- hierarquia de exceções de validação criada;
+- pacote de serviços configurado;
+- 18 testes específicos aprovados;
+- compilação aprovada;
+- Ruff aprovado;
+- mypy aprovado em 23 arquivos;
+- `git diff --check` aprovado.
 
 ```python
 @dataclass(frozen=True, slots=True)
@@ -233,7 +257,7 @@ mypy \
   src/merit_assistant/application/services/document_validation.py
 ```
 
-**Status:** Approved
+**Status:** Concluída
 
 ---
 
@@ -298,7 +322,26 @@ mypy \
   tests/test_pymupdf_inspector.py
 ```
 
-**Status:** Approved
+**Resultado**
+
+- pacote de infraestrutura PDF criado;
+- `PyMuPdfInspector` implementado;
+- contrato `PdfInspector` atendido;
+- validação estrutural realizada localmente com PyMuPDF;
+- PDF sintético válido aceito;
+- conteúdo arbitrário rejeitado;
+- falsa assinatura PDF rejeitada;
+- conteúdo reconhecido como não PDF rejeitado;
+- PDF sem páginas rejeitado;
+- nenhum documento real incluído;
+- nenhuma gravação em disco realizada pelos testes;
+- 6 testes específicos aprovados;
+- 24 testes acumulados aprovados;
+- Ruff aprovado;
+- mypy aprovado;
+- `git diff --check` aprovado.
+
+**Status:** Concluída
 
 ---
 
@@ -369,7 +412,29 @@ pytest tests/test_document_validation.py \
   -k "filename or content_type or mime or seekable or position" -v
 ```
 
-**Status:** Approved
+**Resultado**
+
+- `DocumentValidationService` criado com injeção de `PdfInspector`;
+- limite positivo validado no construtor;
+- nome original tratado somente como metadado;
+- espaços externos removidos do nome;
+- extensões `.pdf` e `.PDF` aceitas;
+- nomes vazios, caminhos e caracteres nulos rejeitados;
+- MIME type `application/pdf` validado;
+- diferenças de caixa, espaços e parâmetros MIME normalizados;
+- MIME type ausente ou incompatível rejeitado;
+- fluxo posicionável validado;
+- fluxo inicialmente deslocado reposicionado para zero;
+- fluxo não posicionável rejeitado com erro específico;
+- fluxo recebido mantido aberto;
+- 41 testes específicos aprovados;
+- 47 testes acumulados aprovados;
+- compilação aprovada;
+- Ruff aprovado;
+- mypy aprovado em 26 arquivos;
+- `git diff --check` aprovado.
+
+**Status:** Concluída
 
 ---
 
@@ -450,7 +515,26 @@ pytest tests/test_document_validation.py \
   -k "empty or size or limit or chunk or sha256 or signature or reset" -v
 ```
 
-**Status:** Approved
+**Resultado**
+
+- método público `validate()` implementado;
+- origem lida em blocos de tamanho controlado;
+- limite aplicado progressivamente durante a leitura;
+- cada leitura limitada ao espaço restante mais um byte;
+- arquivo exatamente no limite aceito;
+- arquivo acima do limite rejeitado após o primeiro byte excedente;
+- arquivo vazio rejeitado;
+- SHA-256 calculado durante a mesma leitura;
+- tamanho calculado a partir dos bytes efetivamente recebidos;
+- assinatura `%PDF-` validada;
+- conteúdo aceito materializado para inspeção estrutural;
+- fluxo restaurado para a posição zero após sucesso;
+- fluxo restaurado após erros de validação;
+- fluxo recebido mantido aberto;
+- falhas de leitura propagadas sem exposição de conteúdo;
+- testes de fronteira, leitura e hash aprovados.
+
+**Status:** Concluída
 
 ---
 
@@ -521,7 +605,31 @@ mypy \
 git diff --check
 ```
 
-**Status:** Approved
+**Resultado**
+
+- `PdfInspector` integrado ao `DocumentValidationService`;
+- inspector recebido por injeção de dependência;
+- factory `from_settings()` criada;
+- `Settings.max_upload_size_mb` convertido corretamente para bytes;
+- inspector chamado somente após validações preliminares;
+- inspector chamado uma única vez com os bytes exatos recebidos;
+- inspector não chamado para nome inválido;
+- inspector não chamado para MIME type incompatível;
+- inspector não chamado para documento vazio;
+- inspector não chamado para documento acima do limite;
+- inspector não chamado para assinatura inválida;
+- falha estrutural traduzida por `InvalidPdfError`;
+- fluxo restaurado após falha estrutural;
+- integração real com `PyMuPdfInspector` aprovada;
+- PDF sintético válido aceito pelo serviço completo;
+- nenhum arquivo definitivo criado;
+- nenhuma chamada de rede realizada;
+- 67 testes acumulados aprovados;
+- Ruff aprovado;
+- mypy aprovado em 26 arquivos;
+- `git diff --check` aprovado.
+
+**Status:** Concluída
 
 ---
 
@@ -535,32 +643,32 @@ Após as Etapas 2 a 6 e antes do Quality Gate completo.
 
 **Itens para revisão**
 
-- [ ] `ValidatedDocumentMetadata` é imutável.
-- [ ] O resultado contém somente os quatro campos aprovados.
-- [ ] O contrato `PdfInspector` não depende de PyMuPDF.
-- [ ] `PyMuPdfInspector` satisfaz o contrato.
-- [ ] O serviço depende somente do contrato.
-- [ ] O nome original é tratado apenas como metadado.
-- [ ] Componentes de diretório são rejeitados.
-- [ ] A extensão `.pdf` é validada.
-- [ ] O MIME type é normalizado e validado.
-- [ ] O limite vem de `Settings.max_upload_size_mb`.
-- [ ] A conversão de megabytes para bytes está correta.
-- [ ] A leitura ocorre em blocos.
-- [ ] Cada leitura respeita o espaço restante mais um byte.
-- [ ] Arquivo exatamente no limite é aceito.
-- [ ] Arquivo acima do limite é rejeitado.
-- [ ] O SHA-256 é calculado durante a leitura.
-- [ ] A assinatura `%PDF-` é validada.
-- [ ] A estrutura é validada localmente com PyMuPDF.
-- [ ] PDF sem páginas é rejeitado.
-- [ ] O fluxo é restaurado para a posição zero.
-- [ ] O fluxo não é fechado.
-- [ ] Nenhum conteúdo documental aparece em logs ou erros.
-- [ ] Nenhum arquivo é armazenado definitivamente.
-- [ ] Nenhum endpoint, banco ou interface foi alterado.
-- [ ] Nenhuma dependência nova foi adicionada.
-- [ ] Somente conteúdo sintético foi utilizado nos testes.
+- [x] `ValidatedDocumentMetadata` é imutável.
+- [x] O resultado contém somente os quatro campos aprovados.
+- [x] O contrato `PdfInspector` não depende de PyMuPDF.
+- [x] `PyMuPdfInspector` satisfaz o contrato.
+- [x] O serviço depende somente do contrato.
+- [x] O nome original é tratado apenas como metadado.
+- [x] Componentes de diretório são rejeitados.
+- [x] A extensão `.pdf` é validada.
+- [x] O MIME type é normalizado e validado.
+- [x] O limite vem de `Settings.max_upload_size_mb`.
+- [x] A conversão de megabytes para bytes está correta.
+- [x] A leitura ocorre em blocos.
+- [x] Cada leitura respeita o espaço restante mais um byte.
+- [x] Arquivo exatamente no limite é aceito.
+- [x] Arquivo acima do limite é rejeitado.
+- [x] O SHA-256 é calculado durante a leitura.
+- [x] A assinatura `%PDF-` é validada.
+- [x] A estrutura é validada localmente com PyMuPDF.
+- [x] PDF sem páginas é rejeitado.
+- [x] O fluxo é restaurado para a posição zero.
+- [x] O fluxo não é fechado.
+- [x] Nenhum conteúdo documental aparece em logs ou erros.
+- [x] Nenhum arquivo é armazenado definitivamente.
+- [x] Nenhum endpoint, banco ou interface foi alterado.
+- [x] Nenhuma dependência nova foi adicionada.
+- [x] Somente conteúdo sintético foi utilizado nos testes.
 
 **Evidências**
 
@@ -647,7 +755,22 @@ docs/features/feature-intent-f01-3-pdf-validation-size-and-sha256.md
 docs/action-plans/action-plan-f01-3-pdf-validation-size-and-sha256.md
 ```
 
-**Status:** Approved
+**Resultado**
+
+- suíte completa de testes aprovada;
+- Ruff aprovado;
+- mypy aprovado;
+- verificador de escopo I-001 aprovado;
+- `git diff --check` aprovado;
+- PostgreSQL operacional;
+- banco mantido em `0002_add_documents`;
+- API e interface operacionais;
+- endpoint `/health` aprovado;
+- processamento externo mantido desabilitado;
+- nenhum PDF real ou arquivo privado rastreado;
+- superfície da mudança correspondente ao Action Plan.
+
+**Status:** Concluída
 
 ---
 
@@ -661,22 +784,22 @@ Após o Quality Gate e antes do encerramento formal.
 
 **Itens para revisão**
 
-- [ ] Todos os testes foram aprovados.
-- [ ] Ruff foi aprovado.
-- [ ] mypy foi aprovado.
-- [ ] O verificador I-001 foi aprovado.
-- [ ] `git diff --check` foi aprovado.
-- [ ] Banco e aplicação permanecem operacionais.
-- [ ] Nenhum PDF real foi incluído no Git.
-- [ ] Nenhum arquivo temporário foi rastreado.
-- [ ] A superfície da mudança corresponde ao plano.
-- [ ] O armazenamento F01.2 não foi alterado.
-- [ ] Nenhum modelo ou migration foi alterado.
-- [ ] Nenhum endpoint foi alterado.
-- [ ] Nenhuma interface foi alterada.
-- [ ] Nenhuma chamada de rede foi introduzida.
-- [ ] Nenhuma expansão de escopo foi identificada.
-- [ ] O Feature Intent F01.3 permanece integralmente atendido.
+- [x] Todos os testes foram aprovados.
+- [x] Ruff foi aprovado.
+- [x] mypy foi aprovado.
+- [x] O verificador I-001 foi aprovado.
+- [x] `git diff --check` foi aprovado.
+- [x] Banco e aplicação permanecem operacionais.
+- [x] Nenhum PDF real foi incluído no Git.
+- [x] Nenhum arquivo temporário foi rastreado.
+- [x] A superfície da mudança corresponde ao plano.
+- [x] O armazenamento F01.2 não foi alterado.
+- [x] Nenhum modelo ou migration foi alterado.
+- [x] Nenhum endpoint foi alterado.
+- [x] Nenhuma interface foi alterada.
+- [x] Nenhuma chamada de rede foi introduzida.
+- [x] Nenhuma expansão de escopo foi identificada.
+- [x] O Feature Intent F01.3 permanece integralmente atendido.
 
 **Evidências**
 
