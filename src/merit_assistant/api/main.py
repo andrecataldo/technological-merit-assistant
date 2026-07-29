@@ -9,6 +9,7 @@ from fastapi import Depends, FastAPI, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from merit_assistant.api.routes.documents import router as documents_router
 from merit_assistant.api.schemas import (
     EvaluationCreate,
     EvaluationResponse,
@@ -22,6 +23,7 @@ from merit_assistant.profiles.loader import ProfileMetadata, load_profile
 
 settings = get_settings()
 app = FastAPI(title=settings.app_name, version="0.1.0")
+app.include_router(documents_router)
 PROFILE_PATH = Path("config/profiles/finep_mais_inovacao_tecnologias_digitais/profile.yaml")
 
 DatabaseSession = Annotated[Session, Depends(get_db_session)]
