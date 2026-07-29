@@ -1,3 +1,13 @@
+from merit_assistant.application.services.document_upload import (
+    DocumentCompensationError,
+    DocumentUploadError,
+    DocumentUploadPersistenceError,
+    DocumentUploadService,
+    DuplicateDocumentError,
+    EvaluationNotFoundError,
+    OriginalFilenameTooLongError,
+    StoredContentMismatchError,
+)
 from merit_assistant.application.services.document_validation import (
     DocumentTooLargeError,
     DocumentValidationError,
@@ -11,13 +21,21 @@ from merit_assistant.application.services.document_validation import (
 )
 
 __all__ = [
+    "DocumentCompensationError",
     "DocumentTooLargeError",
+    "DocumentUploadError",
+    "DocumentUploadPersistenceError",
+    "DocumentUploadService",
     "DocumentValidationError",
     "DocumentValidationService",
+    "DuplicateDocumentError",
     "EmptyDocumentError",
+    "EvaluationNotFoundError",
     "InvalidOriginalFilenameError",
     "InvalidPdfError",
     "NonSeekableDocumentError",
+    "OriginalFilenameTooLongError",
+    "StoredContentMismatchError",
     "UnsupportedContentTypeError",
     "ValidatedDocumentMetadata",
 ]
