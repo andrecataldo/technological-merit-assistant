@@ -6,7 +6,7 @@
 - **Feature pai:** F01 — Ingestão Segura de Documentos
 - **Autor — Human Lead Engineer:** André Cataldo
 - **Data:** 2026-07-28
-- **Status:** Approved
+- **Status:** Done
 - **MCP+ aplicável:** MCP+ 001 v1.1
 - **Dependências:**
   - F01.1 — Modelo de Documento e Migration;
@@ -68,41 +68,41 @@ Criar um caso de uso de aplicação capaz de:
 
 ### 4.1 Dentro do escopo — IN
 
-- [ ] Criar o contrato `DocumentPersistence`.
-- [ ] Criar a implementação `SqlAlchemyDocumentPersistence`.
-- [ ] Criar o serviço `DocumentUploadService`.
-- [ ] Receber:
+- [x] Criar o contrato `DocumentPersistence`.
+- [x] Criar a implementação `SqlAlchemyDocumentPersistence`.
+- [x] Criar o serviço `DocumentUploadService`.
+- [x] Receber:
   - `evaluation_id`;
   - `original_filename`;
   - `declared_content_type`;
   - `BinaryIO`.
-- [ ] Confirmar a existência da avaliação antes do armazenamento.
-- [ ] Executar `DocumentValidationService.validate()`.
-- [ ] Utilizar exclusivamente os metadados retornados pela validação.
-- [ ] Rejeitar nome validado com mais de 255 caracteres.
-- [ ] Verificar duplicidade por `(evaluation_id, sha256)`.
-- [ ] Rejeitar documento duplicado antes do armazenamento quando detectável.
-- [ ] Gerar `document_id` na camada de aplicação.
-- [ ] Gerar `created_at` em UTC.
-- [ ] Usar o mesmo `document_id` no domínio, armazenamento e banco.
-- [ ] Armazenar por meio do contrato `DocumentStorage`.
-- [ ] Utilizar um leitor verificador durante o armazenamento.
-- [ ] Calcular tamanho e SHA-256 dos bytes efetivamente lidos pelo storage.
-- [ ] Comparar os valores efetivamente armazenados com os metadados validados.
-- [ ] Rejeitar e compensar qualquer divergência de conteúdo.
-- [ ] Receber do armazenamento a `storage_key` canônica.
-- [ ] Criar a entidade imutável `Document`.
-- [ ] Persistir os metadados por meio de `DocumentPersistence`.
-- [ ] Confirmar explicitamente a transação.
-- [ ] Executar rollback em caso de falha de persistência.
-- [ ] Excluir o arquivo armazenado quando a persistência não for confirmada.
-- [ ] Tratar corrida de duplicidade detectada pelo banco.
-- [ ] Restaurar o fluxo para a posição zero após o armazenamento.
-- [ ] Manter o fluxo recebido aberto.
-- [ ] Retornar a entidade `Document` após sucesso.
-- [ ] Criar testes unitários com fakes.
-- [ ] Criar testes de integração com PostgreSQL e armazenamento temporário.
-- [ ] Usar apenas PDFs sintéticos nos testes.
+- [x] Confirmar a existência da avaliação antes do armazenamento.
+- [x] Executar `DocumentValidationService.validate()`.
+- [x] Utilizar exclusivamente os metadados retornados pela validação.
+- [x] Rejeitar nome validado com mais de 255 caracteres.
+- [x] Verificar duplicidade por `(evaluation_id, sha256)`.
+- [x] Rejeitar documento duplicado antes do armazenamento quando detectável.
+- [x] Gerar `document_id` na camada de aplicação.
+- [x] Gerar `created_at` em UTC.
+- [x] Usar o mesmo `document_id` no domínio, armazenamento e banco.
+- [x] Armazenar por meio do contrato `DocumentStorage`.
+- [x] Utilizar um leitor verificador durante o armazenamento.
+- [x] Calcular tamanho e SHA-256 dos bytes efetivamente lidos pelo storage.
+- [x] Comparar os valores efetivamente armazenados com os metadados validados.
+- [x] Rejeitar e compensar qualquer divergência de conteúdo.
+- [x] Receber do armazenamento a `storage_key` canônica.
+- [x] Criar a entidade imutável `Document`.
+- [x] Persistir os metadados por meio de `DocumentPersistence`.
+- [x] Confirmar explicitamente a transação.
+- [x] Executar rollback em caso de falha de persistência.
+- [x] Excluir o arquivo armazenado quando a persistência não for confirmada.
+- [x] Tratar corrida de duplicidade detectada pelo banco.
+- [x] Restaurar o fluxo para a posição zero após o armazenamento.
+- [x] Manter o fluxo recebido aberto.
+- [x] Retornar a entidade `Document` após sucesso.
+- [x] Criar testes unitários com fakes.
+- [x] Criar testes de integração com PostgreSQL e armazenamento temporário.
+- [x] Usar apenas PDFs sintéticos nos testes.
 
 ### 4.2 Fora do escopo — OUT
 
@@ -804,6 +804,39 @@ O teste integrado deverá comprovar:
 - interromper se a compensação não puder ser testada.
 
 ---
+
+## 20. Resultado da Implementação
+
+- **Status final:** Done
+- **Data de conclusão:** 2026-07-28
+- **Commit de implementação:** `ddaf3791a42a0dcee5b697f9b656ac4e30dc8b51`
+- **Branch:** `feature/f01-secure-document-ingestion`
+- **Testes completos:** 184 aprovados;
+- **Warning:** 1 warning sem impacto no Quality Gate;
+- **Testes integrados:** 3 aprovados com PostgreSQL real e armazenamento
+  temporário;
+- **Ruff:** aprovado;
+- **mypy:** aprovado;
+- **Verificador I-001:** aprovado;
+- **PostgreSQL:** `0002_add_documents (head)`;
+- **Health check:** aprovado;
+- **Processamento externo:** desabilitado;
+- **Dados sintéticos residuais:** zero;
+- **Arquivos privados versionados:** nenhum;
+- **Expansão de escopo:** nenhuma;
+- **H1:** aprovado pelo Human Lead Engineer;
+- **H2:** aprovado pelo Human Lead Engineer.
+
+### Componentes entregues
+
+- contrato `DocumentPersistence`;
+- adapter `SqlAlchemyDocumentPersistence`;
+- serviço `DocumentUploadService`;
+- leitor incremental de verificação;
+- tradução de erros de persistência;
+- rollback e exclusão compensatória;
+- testes unitários, de persistência e integração;
+- validação com PostgreSQL e armazenamento local reais.
 
 ## Aprovação
 

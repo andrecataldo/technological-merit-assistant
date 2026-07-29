@@ -14,7 +14,7 @@
 - **Branch:** `feature/f01-secure-document-ingestion`
 - **Data:** 2026-07-28
 - **Responsável humano:** André Cataldo
-- **Status:** Approved
+- **Status:** Done
 
 ---
 
@@ -221,7 +221,28 @@ curl -fsS http://localhost:8000/health
 echo
 ```
 
-**Status:** Pending
+**Resultado**
+
+- branch `feature/f01-secure-document-ingestion` confirmada;
+- branch sincronizada com o remoto;
+- working tree limpo;
+- Feature Intent F01.4 aprovado;
+- Action Plan F01.4 aprovado;
+- MCP+ 001 v1.1 presente;
+- F01.1, F01.2 e F01.3 concluídos;
+- 124 testes aprovados;
+- execução registrou 1 warning;
+- Ruff aprovado;
+- mypy aprovado em 24 arquivos;
+- verificador de escopo I-001 aprovado;
+- `git diff --check` aprovado;
+- API, PostgreSQL e interface operacionais;
+- banco em `0002_add_documents (head)`;
+- endpoint `/health` aprovado;
+- processamento externo desabilitado;
+- nenhum arquivo privado rastreado.
+
+**Status:** Concluída
 
 ---
 
@@ -296,7 +317,24 @@ mypy \
 git diff --check
 ```
 
-**Status:** Pending
+**Resultado**
+
+- contrato `DocumentPersistence` criado;
+- operações aprovadas expostas pelo `Protocol`;
+- `DocumentPersistenceError` criada;
+- `DuplicateDocumentPersistenceError` criada;
+- `EvaluationReferencePersistenceError` criada;
+- port mantido independente de SQLAlchemy;
+- port não recebe conteúdo binário ou storage;
+- fake tipado confirmou compatibilidade estrutural;
+- hierarquia de exceções validada;
+- 4 testes específicos aprovados;
+- Ruff aprovado;
+- mypy aprovado em 2 arquivos;
+- compilação aprovada;
+- `git diff --check` aprovado.
+
+**Status:** Concluída
 
 ---
 
@@ -406,7 +444,29 @@ mypy \
 git diff --check
 ```
 
-**Status:** Pending
+**Resultado**
+
+- adapter `SqlAlchemyDocumentPersistence` criado;
+- sessão SQLAlchemy recebida por injeção;
+- adapter não cria nem fecha a sessão;
+- `evaluation_exists()` implementado;
+- `exists_by_evaluation_and_sha256()` implementado;
+- busca de duplicidade restrita à avaliação;
+- `add()` mapeia todos os campos de `Document`;
+- `commit()` implementado;
+- `rollback()` implementado;
+- constraint `uq_documents_evaluation_sha256` traduzida para `DuplicateDocumentPersistenceError`;
+- constraint `fk_documents_evaluation_id` traduzida para `EvaluationReferencePersistenceError`;
+- constraints desconhecidas traduzidas para `DocumentPersistenceError`;
+- erros SQLAlchemy genéricos traduzidos para `DocumentPersistenceError`;
+- causas originais preservadas por encadeamento de exceções;
+- 10 testes específicos aprovados;
+- Ruff aprovado;
+- mypy aprovado em 27 arquivos;
+- compilação aprovada;
+- `git diff --check` aprovado.
+
+**Status:** Concluída
 
 ---
 
@@ -484,7 +544,35 @@ mypy \
 git diff --check
 ```
 
-**Status:** Pending
+**Resultado**
+
+- módulo `document_upload.py` criado;
+- hierarquia `DocumentUploadError` criada;
+- `EvaluationNotFoundError` criada;
+- `DuplicateDocumentError` criada;
+- `OriginalFilenameTooLongError` criada;
+- `StoredContentMismatchError` criada;
+- `DocumentUploadPersistenceError` criada;
+- `DocumentCompensationError` criada;
+- leitor verificador interno criado;
+- leitor delega `read(size)` ao fluxo original;
+- somente bytes retornados são contabilizados;
+- SHA-256 é atualizado somente com bytes retornados;
+- EOF é registrado somente quando o fluxo retorna `b""`;
+- leitor não executa `seek()` durante a leitura;
+- leitor não fecha o fluxo original;
+- leitor não mantém uma segunda cópia integral;
+- erros do fluxo original são propagados;
+- exceções públicas exportadas pelo pacote de serviços;
+- leitor interno não foi exportado;
+- mensagens não expõem conteúdo documental ou SHA-256 completo;
+- 20 testes específicos aprovados;
+- Ruff aprovado;
+- mypy aprovado em 28 arquivos;
+- compilação aprovada;
+- `git diff --check` aprovado.
+
+**Status:** Concluída
 
 ---
 
@@ -577,7 +665,39 @@ mypy \
 git diff --check
 ```
 
-**Status:** Pending
+**Resultado**
+
+- `DocumentUploadService` implementado;
+- existência da avaliação verificada antes da validação;
+- documento validado uma única vez;
+- limite persistente de 255 caracteres aplicado ao nome validado;
+- duplicidade consultada por avaliação e SHA-256;
+- duplicidade conhecida rejeitada antes do armazenamento;
+- mesmo SHA-256 permitido em avaliações diferentes;
+- UUID gerado uma única vez;
+- `clock` chamado uma única vez;
+- data sem timezone rejeitada antes do armazenamento;
+- data válida normalizada para UTC;
+- posição inicial do fluxo confirmada antes do armazenamento;
+- leitor verificador entregue ao storage;
+- tamanho, SHA-256 e EOF comparados após o armazenamento;
+- fluxo restaurado para a posição zero;
+- entidade `Document` criada com os metadados validados;
+- `storage_key` preservada a partir do retorno do storage;
+- mesma entidade adicionada à persistência;
+- `add()` executado antes de `commit()`;
+- commit executado uma única vez no sucesso;
+- nenhum rollback ou delete executado no sucesso;
+- fluxo permanece aberto;
+- fluxo termina na posição zero;
+- serviço exportado pelo pacote de aplicação;
+- 27 testes específicos aprovados;
+- Ruff aprovado;
+- mypy aprovado em 28 arquivos;
+- compilação aprovada;
+- `git diff --check` aprovado.
+
+**Status:** Concluída
 
 ---
 
@@ -677,7 +797,39 @@ mypy \
 git diff --check
 ```
 
-**Status:** Pending
+**Resultado**
+
+- compensação iniciada somente após `store()` retornar uma `storage_key`;
+- falhas anteriores ao armazenamento não executam compensação física;
+- falha durante `store()` é propagada sem rollback ou delete pelo serviço;
+- EOF não observado gera `StoredContentMismatchError`;
+- divergência de tamanho gera `StoredContentMismatchError`;
+- divergência de SHA-256 gera `StoredContentMismatchError`;
+- falhas após armazenamento executam rollback;
+- falhas após armazenamento executam exclusão do arquivo;
+- rollback e exclusão são tentados independentemente;
+- restauração do fluxo é tentada independentemente;
+- `DuplicateDocumentPersistenceError` é traduzido para `DuplicateDocumentError`;
+- `EvaluationReferencePersistenceError` é traduzido para `EvaluationNotFoundError`;
+- outros erros do port são traduzidos para `DocumentUploadPersistenceError`;
+- erros de consulta anteriores ao armazenamento são traduzidos sem compensação;
+- falha de rollback gera `DocumentCompensationError`;
+- exceção durante delete gera `DocumentCompensationError`;
+- retorno `False` de delete gera `DocumentCompensationError`;
+- falhas simultâneas de rollback e delete são preservadas estruturalmente;
+- causa original é preservada por encadeamento;
+- mensagens não expõem conteúdo documental;
+- arquivo não é excluído após commit confirmado;
+- fluxo permanece aberto;
+- fluxo é restaurado sempre que tecnicamente possível;
+- 24 testes selecionados de compensação aprovados;
+- 42 testes completos do serviço aprovados;
+- Ruff aprovado;
+- mypy aprovado em 28 arquivos;
+- compilação aprovada;
+- `git diff --check` aprovado.
+
+**Status:** Concluída
 
 ---
 
@@ -692,43 +844,62 @@ armazenamento local real.
 
 **Itens para revisão**
 
-- [ ] O port de persistência não depende de SQLAlchemy.
-- [ ] A implementação SQLAlchemy não depende do serviço de upload.
-- [ ] A sessão é recebida por injeção.
-- [ ] A sessão não é criada nem fechada pela persistência.
-- [ ] O mapeamento preserva todos os campos de `Document`.
-- [ ] A restrição de duplicidade é traduzida pelo nome aprovado.
-- [ ] A foreign key é traduzida pelo nome aprovado.
-- [ ] O serviço confirma a avaliação antes da validação.
-- [ ] O validador é chamado uma única vez.
-- [ ] O nome maior que 255 caracteres é rejeitado.
-- [ ] A duplicidade conhecida é rejeitada antes do storage.
-- [ ] O UUID é gerado uma única vez.
-- [ ] A data possui timezone UTC.
-- [ ] O leitor verificador não acumula conteúdo.
-- [ ] O leitor verificador exige EOF observado.
-- [ ] Tamanho e SHA-256 consumidos são comparados aos valores validados.
-- [ ] Divergência impede persistência.
-- [ ] Compensação ocorre após qualquer falha posterior ao storage.
-- [ ] Rollback e delete são tentados independentemente.
-- [ ] `delete()` retornando `False` é tratado como falha.
-- [ ] O erro original permanece encadeado.
-- [ ] Mensagens não expõem conteúdo, hash completo ou storage key.
-- [ ] O fluxo não é fechado.
-- [ ] O fluxo é restaurado sempre que possível.
-- [ ] Nenhum endpoint ou interface foi criado.
-- [ ] Nenhuma migration ou dependência foi adicionada.
-- [ ] `DocumentStorage` não foi alterado.
-- [ ] `DocumentValidationService` não foi alterado.
-- [ ] `DocumentModel` não foi alterado.
-- [ ] Testes unitários foram aprovados.
-- [ ] Ruff foi aprovado.
-- [ ] mypy foi aprovado.
-- [ ] `git diff --check` foi aprovado.
+- [x] O port de persistência não depende de SQLAlchemy.
+- [x] A implementação SQLAlchemy não depende do serviço de upload.
+- [x] A sessão é recebida por injeção.
+- [x] A sessão não é criada nem fechada pela persistência.
+- [x] O mapeamento preserva todos os campos de `Document`.
+- [x] A restrição de duplicidade é traduzida pelo nome aprovado.
+- [x] A foreign key é traduzida pelo nome aprovado.
+- [x] O serviço confirma a avaliação antes da validação.
+- [x] O validador é chamado uma única vez.
+- [x] O nome maior que 255 caracteres é rejeitado.
+- [x] A duplicidade conhecida é rejeitada antes do storage.
+- [x] O UUID é gerado uma única vez.
+- [x] A data possui timezone UTC.
+- [x] O leitor verificador não acumula conteúdo.
+- [x] O leitor verificador exige EOF observado.
+- [x] Tamanho e SHA-256 consumidos são comparados aos valores validados.
+- [x] Divergência impede persistência.
+- [x] Compensação ocorre após qualquer falha posterior ao storage.
+- [x] Rollback e delete são tentados independentemente.
+- [x] `delete()` retornando `False` é tratado como falha.
+- [x] O erro original permanece encadeado.
+- [x] Mensagens não expõem conteúdo, hash completo ou storage key.
+- [x] O fluxo não é fechado.
+- [x] O fluxo é restaurado sempre que possível.
+- [x] Nenhum endpoint ou interface foi criado.
+- [x] Nenhuma migration ou dependência foi adicionada.
+- [x] `DocumentStorage` não foi alterado.
+- [x] `DocumentValidationService` não foi alterado.
+- [x] `DocumentModel` não foi alterado.
+- [x] Testes unitários foram aprovados.
+- [x] Ruff foi aprovado.
+- [x] mypy foi aprovado.
+- [x] `git diff --check` foi aprovado.
 
-**Status:** Pending
-**Aprovado por:** pendente
-**Data:** pendente
+**Evidências**
+
+- 57 testes unitários aprovados;
+- Ruff aprovado;
+- mypy aprovado em 30 arquivos;
+- `git diff --check` aprovado;
+- aplicação independente de SQLAlchemy;
+- adapter SQLAlchemy independente do serviço de upload;
+- sessão recebida por injeção;
+- adapter não cria nem fecha a sessão;
+- constraint `uq_documents_evaluation_sha256` confirmada;
+- constraint `fk_documents_evaluation_id` confirmada;
+- superfície da alteração aprovada;
+- `DocumentStorage` inalterado;
+- `DocumentValidationService` inalterado;
+- `DocumentModel` inalterado;
+- dependências e migrations inalteradas;
+- nenhum endpoint ou interface criado.
+
+**Status:** Approved
+**Aprovado por:** Human Lead Engineer
+**Data:** 2026-07-28
 
 **Condição de saída**
 
@@ -845,7 +1016,43 @@ git diff --check
 Este arquivo é autorizado pelo Action Plan por tornar explícita a separação
 entre testes unitários, testes do adapter SQLAlchemy e teste integrado completo.
 
-**Status:** Pending
+**Resultado**
+
+- PostgreSQL real utilizado na revisão `0002_add_documents`;
+- serviços Docker operacionais;
+- dados e PDFs utilizados exclusivamente sintéticos;
+- armazenamento temporário criado fora do repositório;
+- `evaluation_exists()` validado no PostgreSQL;
+- `exists_by_evaluation_and_sha256()` validado no PostgreSQL;
+- persistência completa de `DocumentModel` confirmada;
+- valores persistidos comparados exatamente com a entidade;
+- mesmo SHA-256 em avaliações diferentes permitido;
+- duplicidade na mesma avaliação rejeitada por
+  `uq_documents_evaluation_sha256`;
+- referência inválida rejeitada por
+  `fk_documents_evaluation_id`;
+- erros das constraints traduzidos conforme o contrato;
+- sessão permaneceu aberta após rollback;
+- upload nominal validado com `PyMuPdfInspector`;
+- `DocumentValidationService` utilizado sem alterações;
+- `LocalDocumentStorage` utilizado sem alterações;
+- storage key canônica confirmada;
+- conteúdo físico idêntico ao PDF sintético confirmado;
+- tamanho e SHA-256 confirmados;
+- fluxo permaneceu aberto e restaurado na posição zero;
+- falha controlada de commit executou rollback;
+- falha controlada de commit removeu o arquivo armazenado;
+- nenhum registro parcial permaneceu confirmado;
+- nenhum arquivo temporário ou órfão permaneceu;
+- dados sintéticos removidos ao final;
+- perfis sintéticos residuais no PostgreSQL: zero;
+- 3 testes integrados aprovados;
+- 13 testes acumulados de adapter e integração aprovados;
+- Ruff aprovado;
+- mypy aprovado em 31 arquivos;
+- `git diff --check` aprovado.
+
+**Status:** Concluída
 
 ---
 
@@ -915,7 +1122,31 @@ git status --short --untracked-files=all | grep -E \
 - nenhum arquivo órfão deixado pelos testes;
 - nenhuma expansão de escopo identificada.
 
-**Status:** Pending
+**Resultado**
+
+- suíte completa aprovada com 184 testes;
+- 1 warning registrado, sem falha no Quality Gate;
+- Ruff aprovado;
+- mypy aprovado em 27 arquivos de `src`;
+- verificador de escopo I-001 aprovado;
+- `git diff --check` aprovado;
+- serviços Docker operacionais;
+- PostgreSQL saudável;
+- banco na revisão `0002_add_documents (head)`;
+- endpoint `/health` aprovado;
+- processamento externo confirmado como desabilitado;
+- nenhum arquivo potencialmente privado rastreado;
+- nenhum arquivo protegido alterado;
+- nenhum PDF real encontrado;
+- nenhum arquivo de banco, dump ou backup encontrado;
+- cache `.mypy_cache` confirmado como ignorado e não rastreado;
+- nenhum perfil sintético residual no PostgreSQL;
+- integridade básica do PostgreSQL aprovada;
+- nenhum arquivo órfão deixado pelos testes;
+- nenhuma expansão de escopo identificada;
+- superfície final correspondente ao Action Plan.
+
+**Status:** Concluída
 
 ---
 
@@ -930,49 +1161,73 @@ implementação.
 
 **Itens para revisão**
 
-- [ ] Todos os critérios do Feature Intent foram atendidos.
-- [ ] O port de persistência permanece independente de SQLAlchemy.
-- [ ] A implementação SQLAlchemy recebe a sessão por injeção.
-- [ ] A sessão não é fechada.
-- [ ] O mapeamento para `DocumentModel` está completo.
-- [ ] Avaliação inexistente é rejeitada antes da validação.
-- [ ] Validação ocorre uma única vez.
-- [ ] Nome acima de 255 caracteres é rejeitado.
-- [ ] Duplicidade conhecida é rejeitada antes do armazenamento.
-- [ ] Restrição do banco continua sendo autoridade em concorrência.
-- [ ] Mesmo SHA-256 em avaliações diferentes é permitido.
-- [ ] UUID é único e consistente.
-- [ ] `created_at` possui timezone UTC.
-- [ ] Leitor verificador não mantém cópia integral.
-- [ ] EOF, tamanho e SHA-256 são verificados.
-- [ ] Divergência provoca compensação.
-- [ ] Erro de persistência provoca rollback e delete.
-- [ ] Rollback e delete são tentados independentemente.
-- [ ] Falha de compensação nunca retorna sucesso.
-- [ ] Erros são traduzidos conforme o contrato aprovado.
-- [ ] Causas são preservadas.
-- [ ] Mensagens não expõem dados documentais.
-- [ ] Fluxo permanece aberto e restaurado.
-- [ ] Teste integrado nominal foi aprovado.
-- [ ] Teste integrado de compensação foi aprovado.
-- [ ] PostgreSQL permaneceu íntegro.
-- [ ] Nenhum arquivo órfão permaneceu.
-- [ ] Nenhum PDF real foi versionado.
-- [ ] Nenhuma migration foi criada.
-- [ ] Nenhum modelo existente foi alterado.
-- [ ] Nenhum endpoint ou interface foi criado.
-- [ ] Nenhuma dependência foi adicionada.
-- [ ] `pytest` foi aprovado.
-- [ ] Ruff foi aprovado.
-- [ ] mypy foi aprovado.
-- [ ] Verificador I-001 foi aprovado.
-- [ ] `git diff --check` foi aprovado.
-- [ ] Aplicação permaneceu operacional.
-- [ ] Superfície da mudança corresponde ao plano.
+- [x] Todos os critérios do Feature Intent foram atendidos.
+- [x] O port de persistência permanece independente de SQLAlchemy.
+- [x] A implementação SQLAlchemy recebe a sessão por injeção.
+- [x] A sessão não é fechada.
+- [x] O mapeamento para `DocumentModel` está completo.
+- [x] Avaliação inexistente é rejeitada antes da validação.
+- [x] Validação ocorre uma única vez.
+- [x] Nome acima de 255 caracteres é rejeitado.
+- [x] Duplicidade conhecida é rejeitada antes do armazenamento.
+- [x] Restrição do banco continua sendo autoridade em concorrência.
+- [x] Mesmo SHA-256 em avaliações diferentes é permitido.
+- [x] UUID é único e consistente.
+- [x] `created_at` possui timezone UTC.
+- [x] Leitor verificador não mantém cópia integral.
+- [x] EOF, tamanho e SHA-256 são verificados.
+- [x] Divergência provoca compensação.
+- [x] Erro de persistência provoca rollback e delete.
+- [x] Rollback e delete são tentados independentemente.
+- [x] Falha de compensação nunca retorna sucesso.
+- [x] Erros são traduzidos conforme o contrato aprovado.
+- [x] Causas são preservadas.
+- [x] Mensagens não expõem dados documentais.
+- [x] Fluxo permanece aberto e restaurado.
+- [x] Teste integrado nominal foi aprovado.
+- [x] Teste integrado de compensação foi aprovado.
+- [x] PostgreSQL permaneceu íntegro.
+- [x] Nenhum arquivo órfão permaneceu.
+- [x] Nenhum PDF real foi versionado.
+- [x] Nenhuma migration foi criada.
+- [x] Nenhum modelo existente foi alterado.
+- [x] Nenhum endpoint ou interface foi criado.
+- [x] Nenhuma dependência foi adicionada.
+- [x] `pytest` foi aprovado.
+- [x] Ruff foi aprovado.
+- [x] mypy foi aprovado.
+- [x] Verificador I-001 foi aprovado.
+- [x] `git diff --check` foi aprovado.
+- [x] Aplicação permaneceu operacional.
+- [x] Superfície da mudança corresponde ao plano.
 
-**Status:** Pending
-**Aprovado por:** pendente
-**Data:** pendente
+**Evidências**
+
+- revisão semântica integral do pacote H2 concluída;
+- duas melhorias identificadas na revisão foram corrigidas;
+- divergência isolada de SHA-256 testada com tamanho idêntico;
+- limpeza defensiva dos dados sintéticos incorporada à fixture integrada;
+- 184 testes aprovados;
+- 1 warning sem impacto no Quality Gate;
+- Ruff aprovado;
+- mypy aprovado em 27 arquivos de `src`;
+- verificador de escopo I-001 aprovado;
+- `git diff --check` aprovado;
+- testes integrados nominal e de compensação aprovados;
+- PostgreSQL íntegro e sem dados sintéticos residuais;
+- banco na revisão `0002_add_documents (head)`;
+- API, PostgreSQL e interface operacionais;
+- endpoint `/health` aprovado;
+- processamento externo desabilitado;
+- nenhum arquivo privado rastreado;
+- nenhum arquivo órfão identificado;
+- nenhuma migration, dependência, interface ou endpoint adicionado;
+- superfície da alteração correspondente ao Action Plan;
+- nenhum staging ou commit realizado antes da aprovação.
+
+**Status:** Approved
+**Aprovado por:** Human Lead Engineer
+**Data:** 2026-07-28
 
 **Condição de saída**
 
@@ -1046,7 +1301,33 @@ docs: close F01.4 secure upload orchestration
 - PDFs;
 - arquivos privados.
 
-**Status:** Pending
+**Resultado**
+
+- aprovação do H2 registrada;
+- Quality Gate final aprovado;
+- staging seletivo revisado;
+- arquivos protegidos mantidos fora do staging;
+- commit de implementação criado com a mensagem aprovada;
+- commit de implementação: `ddaf3791a42a0dcee5b697f9b656ac4e30dc8b51`;
+- implementação enviada para `origin/feature/f01-secure-document-ingestion`;
+- Feature Intent atualizado para `Done`;
+- Action Plan atualizado para `Done`;
+- 184 testes completos aprovados;
+- 3 testes integrados aprovados;
+- 1 warning registrado sem impacto no Quality Gate;
+- Ruff aprovado;
+- mypy aprovado;
+- verificador I-001 aprovado;
+- `git diff --check` aprovado;
+- PostgreSQL em `0002_add_documents (head)`;
+- endpoint `/health` aprovado;
+- processamento externo desabilitado;
+- nenhum dado sintético residual;
+- nenhum arquivo privado versionado;
+- nenhuma expansão de escopo;
+- commit documental de encerramento preparado com a mensagem aprovada.
+
+**Status:** Concluída
 
 ---
 
