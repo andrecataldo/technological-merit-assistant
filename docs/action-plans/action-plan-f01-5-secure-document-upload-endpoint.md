@@ -1242,11 +1242,11 @@ Incluir:
 
 **Registro**
 
-- **Status:** Done
-- **Aprovado por:** pendente
-- **Data:** pendente
-- **Pendências:** pendente
-- **Evidências:** pendente
+- **Status:** Approved
+- **Aprovado por:** André Cataldo
+- **Data:** 2026-07-29
+- **Pendências:** Um warning externo e não bloqueante do FastAPI/Starlette TestClient sobre futura migração para httpx2.
+- **Evidências:** 214 testes totais aprovados, incluindo 25 testes unitários e 5 integrados da F01.5; Ruff, mypy, verificador I-001 e git diff --check aprovados; PostgreSQL sem resíduos sintéticos; containers, migration, health e OpenAPI aprovados; patch H2 com SHA-256 813a7b00e92ba7603ff864016c02f1996be728cea8074485d827d9def31fef76.
 
 ---
 
