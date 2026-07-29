@@ -16,7 +16,7 @@
 - **Baseline de planejamento:** `96d3cf5`
 - **Data:** 2026-07-29
 - **Responsável humano:** André Cataldo
-- **Status:** Approved
+- **Status:** Done
 
 ---
 
@@ -618,11 +618,11 @@ O pacote deverá incluir:
 
 ### Registro
 
-- **Status:** Pending
-- **Aprovado por:** pendente
-- **Data:** pendente
-- **Pendências:** pendente
-- **Evidências:** pendente
+- **Status:** Approved
+- **Aprovado por:** André Cataldo
+- **Data:** 2026-07-29
+- **Pendências:** Um warning externo e não bloqueante do FastAPI/Starlette TestClient sobre futura migração para httpx2.
+- **Evidências:** 25 testes unitários F01.5 e 209 testes totais aprovados; Ruff, mypy e git diff --check aprovados; superfície protegida preservada; HTTP 422 atualizado para HTTP_422_UNPROCESSABLE_CONTENT.
 
 ---
 
@@ -821,7 +821,7 @@ curl -fsS http://localhost:8000/health
 - processamento externo desabilitado;
 - nenhum arquivo privado rastreado.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -859,7 +859,7 @@ git diff --check
 - aplicação importável;
 - diff check aprovado.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -891,7 +891,7 @@ git diff --check
 - conversão por atributos aprovada;
 - testes aprovados.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -926,7 +926,7 @@ git diff --check
 - dependência sobrescrevível;
 - nenhum commit ou close executado pela fábrica.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -964,7 +964,7 @@ git diff --check
 - resposta segura;
 - endpoints existentes preservados.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -999,7 +999,7 @@ git diff --check
 - encadeamento interno preservado;
 - testes parametrizados aprovados.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -1032,7 +1032,7 @@ git diff --check
 - schema seguro comprovado;
 - health preservado.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -1054,7 +1054,7 @@ Nenhum arquivo novo além da implementação em revisão.
 - aprovação humana registrada;
 - nenhuma implementação commitada.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -1090,7 +1090,7 @@ git diff --check
 - limpeza defensiva aprovada;
 - zero resíduos.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -1136,7 +1136,7 @@ PY
 - processamento externo desabilitado;
 - rota presente no OpenAPI.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -1188,7 +1188,7 @@ curl -fsS http://localhost:8000/health
 - zero dados sintéticos residuais;
 - zero arquivos órfãos.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -1242,7 +1242,7 @@ Incluir:
 
 **Registro**
 
-- **Status:** Pending
+- **Status:** Done
 - **Aprovado por:** pendente
 - **Data:** pendente
 - **Pendências:** pendente
@@ -1295,7 +1295,7 @@ git push origin feature/f01-secure-document-ingestion
 - push concluído;
 - branch remota atualizada.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -1362,7 +1362,7 @@ git log -3 --oneline --decorate
 - sincronização `0 0`;
 - F01.5 registrada como `Done`.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -1627,6 +1627,35 @@ feat: add secure document upload endpoint
 ```text
 docs: close F01.5 secure document upload endpoint
 ```
+
+---
+
+
+## 7.1 Registro de Encerramento
+
+- **Status final:** Done
+- **Data de conclusão:** 2026-07-29
+- **Commit de implementação:** `b9fddd28c9ca9af15676acc7364a2f675e9e1b58`
+- **Commit documental:** este commit de encerramento
+- **Dependência instalada:** `python-multipart 0.0.32`
+- **Testes unitários F01.5:** 25 aprovados
+- **Testes integrados F01.5:** 5 aprovados
+- **Suíte completa:** 214 testes aprovados
+- **Quality Gates:** pytest, Ruff, mypy, I-001 e `git diff --check` aprovados
+- **Warning avaliado:** 1 warning externo e não bloqueante do FastAPI/Starlette TestClient
+- **Containers:** API, UI e PostgreSQL operacionais
+- **Banco:** `0002_add_documents (head)`
+- **Health:** `{"status":"ok","external_processing_enabled":false}`
+- **OpenAPI:** endpoint POST, multipart e seis campos públicos aprovados
+- **H1:** Approved
+- **H2:** Approved
+- **Resíduos PostgreSQL:** zero
+- **Arquivos sintéticos residuais:** zero
+- **PDFs reais rastreados:** zero
+- **Arquivos privados rastreados:** somente `data/private/.gitkeep`
+- **Componentes protegidos alterados:** nenhum
+- **Expansão de escopo:** nenhuma
+- **Branch após implementação:** sincronizada com o remoto
 
 ---
 

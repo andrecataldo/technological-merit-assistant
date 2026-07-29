@@ -6,7 +6,7 @@
 - **Feature pai:** F01 — Ingestão Segura de Documentos
 - **Autor — Human Lead Engineer:** André Cataldo
 - **Data:** 2026-07-29
-- **Status:** Approved
+- **Status:** Done
 - **Branch:** `feature/f01-secure-document-ingestion`
 - **Baseline:** `38b22962dbb032620eea8772b0db35e7e0159640`
 - **MCP+ aplicável:** MCP+ 001 v1.1
@@ -74,40 +74,40 @@ O endpoint deverá:
 
 ### 4.1 Dentro do escopo — IN
 
-- [ ] Criar `POST /evaluations/{evaluation_id}/documents`.
-- [ ] Receber `evaluation_id` como UUID no path.
-- [ ] Receber um campo multipart obrigatório chamado `file`.
-- [ ] Receber o arquivo por meio de `UploadFile`.
-- [ ] Passar `UploadFile.file` diretamente ao `DocumentUploadService`.
-- [ ] Passar `UploadFile.filename` como nome original.
-- [ ] Passar `UploadFile.content_type` como tipo declarado.
-- [ ] Rejeitar filename ausente antes da chamada do serviço.
-- [ ] Criar schema público de resposta documental.
-- [ ] Retornar HTTP `201 Created`.
-- [ ] Retornar somente:
+- [x] Criar `POST /evaluations/{evaluation_id}/documents`.
+- [x] Receber `evaluation_id` como UUID no path.
+- [x] Receber um campo multipart obrigatório chamado `file`.
+- [x] Receber o arquivo por meio de `UploadFile`.
+- [x] Passar `UploadFile.file` diretamente ao `DocumentUploadService`.
+- [x] Passar `UploadFile.filename` como nome original.
+- [x] Passar `UploadFile.content_type` como tipo declarado.
+- [x] Rejeitar filename ausente antes da chamada do serviço.
+- [x] Criar schema público de resposta documental.
+- [x] Retornar HTTP `201 Created`.
+- [x] Retornar somente:
   - `id`;
   - `evaluation_id`;
   - `original_filename`;
   - `content_type`;
   - `size_bytes`;
   - `created_at`.
-- [ ] Não retornar `storage_key`.
-- [ ] Não retornar caminho físico.
-- [ ] Não retornar SHA-256.
-- [ ] Criar dependência de composição do `DocumentUploadService`.
-- [ ] Utilizar a `Session` injetada pelo request.
-- [ ] Criar `SqlAlchemyDocumentPersistence` com a sessão recebida.
-- [ ] Criar ou reutilizar `DocumentValidationService`.
-- [ ] Criar ou reutilizar `LocalDocumentStorage`.
-- [ ] Criar ou reutilizar `PyMuPdfInspector`.
-- [ ] Traduzir erros conhecidos para respostas HTTP.
-- [ ] Preservar o fechamento da sessão em `get_db_session`.
-- [ ] Deixar o fechamento do `UploadFile` para o ciclo de vida do FastAPI.
-- [ ] Adicionar `python-multipart` como dependência de runtime.
-- [ ] Criar testes unitários da camada HTTP.
-- [ ] Criar teste integrado do endpoint.
-- [ ] Usar somente PDFs sintéticos nos testes.
-- [ ] Manter os Quality Gates existentes aprovados.
+- [x] Não retornar `storage_key`.
+- [x] Não retornar caminho físico.
+- [x] Não retornar SHA-256.
+- [x] Criar dependência de composição do `DocumentUploadService`.
+- [x] Utilizar a `Session` injetada pelo request.
+- [x] Criar `SqlAlchemyDocumentPersistence` com a sessão recebida.
+- [x] Criar ou reutilizar `DocumentValidationService`.
+- [x] Criar ou reutilizar `LocalDocumentStorage`.
+- [x] Criar ou reutilizar `PyMuPdfInspector`.
+- [x] Traduzir erros conhecidos para respostas HTTP.
+- [x] Preservar o fechamento da sessão em `get_db_session`.
+- [x] Deixar o fechamento do `UploadFile` para o ciclo de vida do FastAPI.
+- [x] Adicionar `python-multipart` como dependência de runtime.
+- [x] Criar testes unitários da camada HTTP.
+- [x] Criar teste integrado do endpoint.
+- [x] Usar somente PDFs sintéticos nos testes.
+- [x] Manter os Quality Gates existentes aprovados.
 
 ### 4.2 Fora do escopo — OUT
 
@@ -572,6 +572,28 @@ Nenhum código de produção deverá ser implementado antes de:
 2. aprovação do Human Lead Engineer;
 3. commit e push do Feature Intent aprovado;
 4. criação e aprovação do Action Plan F01.5.
+
+---
+
+## 17. Resultado da Implementação
+
+- **Status final:** Done
+- **Data de conclusão:** 2026-07-29
+- **Commit de implementação:** `b9fddd28c9ca9af15676acc7364a2f675e9e1b58`
+- **Endpoint entregue:** `POST /evaluations/{evaluation_id}/documents`
+- **Dependência efetiva:** `python-multipart 0.0.32`
+- **Testes unitários F01.5:** 25 aprovados
+- **Testes integrados F01.5:** 5 aprovados
+- **Suíte completa:** 214 testes aprovados
+- **Warnings:** 1 warning externo e não bloqueante do FastAPI/Starlette TestClient
+- **Banco:** `0002_add_documents (head)`
+- **Health:** `ok`, com processamento externo desabilitado
+- **OpenAPI:** contrato multipart e schema público aprovados
+- **Resíduos sintéticos:** zero
+- **Documentos reais versionados:** nenhum
+- **Expansão de escopo:** nenhuma
+- **H1:** aprovado em 2026-07-29
+- **H2:** aprovado em 2026-07-29
 
 ---
 
