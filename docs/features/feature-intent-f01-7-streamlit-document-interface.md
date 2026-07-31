@@ -6,7 +6,7 @@
 - **Feature pai:** F01 — Ingestão Segura de Documentos
 - **Autor — Human Lead Engineer:** André Cataldo
 - **Data:** 2026-07-31
-- **Status:** Approved
+- **Status:** Done
 - **Branch:** `feature/f01-secure-document-ingestion`
 - **Baseline:** `7bf6c6a7c550986b467c5f837317d7af669858a6`
 - **MCP+ aplicável:** MCP+ 001 v1.1
@@ -100,63 +100,63 @@ iteração.
 
 ### 4.1 Dentro do escopo — IN
 
-- [ ] Evoluir a interface Streamlit existente.
-- [ ] Preservar a verificação de health da API.
-- [ ] Preservar a exibição do estado de processamento externo.
-- [ ] Preservar a consulta dos perfis de avaliação.
-- [ ] Preservar a criação de avaliações.
-- [ ] Preservar a listagem de avaliações.
-- [ ] Tratar com segurança falhas nos fluxos já existentes da interface.
-- [ ] Permitir selecionar uma avaliação existente.
-- [ ] Identificar cada opção por título e UUID.
-- [ ] Manter a avaliação selecionada durante reruns legítimos da sessão.
-- [ ] Atualizar as opções depois da criação de uma avaliação.
-- [ ] Permitir selecionar um único PDF por submissão.
-- [ ] Restringir visualmente o seletor a arquivos PDF.
-- [ ] Manter a validação definitiva no backend.
-- [ ] Enviar o arquivo no campo multipart `file`.
-- [ ] Enviar o `evaluation_id` selecionado no path.
-- [ ] Utilizar o fluxo fornecido pelo `UploadedFile`.
-- [ ] Não criar arquivo temporário adicional.
-- [ ] Não executar upload antes da submissão explícita.
-- [ ] Bloquear nova submissão enquanto o upload estiver em andamento.
-- [ ] Impedir reenvio automático causado por rerun do Streamlit.
-- [ ] Limpar ou invalidar o arquivo selecionado após upload bem-sucedido.
-- [ ] Executar uma única chamada de upload por submissão.
-- [ ] Informar sucesso somente após resposta HTTP `201`.
-- [ ] Atualizar a lista documental após upload bem-sucedido.
-- [ ] Consultar documentos por meio do endpoint GET aprovado.
-- [ ] Exibir lista vazia de forma compreensível.
-- [ ] Exibir somente:
+- [x] Evoluir a interface Streamlit existente.
+- [x] Preservar a verificação de health da API.
+- [x] Preservar a exibição do estado de processamento externo.
+- [x] Preservar a consulta dos perfis de avaliação.
+- [x] Preservar a criação de avaliações.
+- [x] Preservar a listagem de avaliações.
+- [x] Tratar com segurança falhas nos fluxos já existentes da interface.
+- [x] Permitir selecionar uma avaliação existente.
+- [x] Identificar cada opção por título e UUID.
+- [x] Manter a avaliação selecionada durante reruns legítimos da sessão.
+- [x] Atualizar as opções depois da criação de uma avaliação.
+- [x] Permitir selecionar um único PDF por submissão.
+- [x] Restringir visualmente o seletor a arquivos PDF.
+- [x] Manter a validação definitiva no backend.
+- [x] Enviar o arquivo no campo multipart `file`.
+- [x] Enviar o `evaluation_id` selecionado no path.
+- [x] Utilizar o fluxo fornecido pelo `UploadedFile`.
+- [x] Não criar arquivo temporário adicional.
+- [x] Não executar upload antes da submissão explícita.
+- [x] Bloquear nova submissão enquanto o upload estiver em andamento.
+- [x] Impedir reenvio automático causado por rerun do Streamlit.
+- [x] Limpar ou invalidar o arquivo selecionado após upload bem-sucedido.
+- [x] Executar uma única chamada de upload por submissão.
+- [x] Informar sucesso somente após resposta HTTP `201`.
+- [x] Atualizar a lista documental após upload bem-sucedido.
+- [x] Consultar documentos por meio do endpoint GET aprovado.
+- [x] Exibir lista vazia de forma compreensível.
+- [x] Exibir somente:
   - `id`;
   - `evaluation_id`;
   - `original_filename`;
   - `content_type`;
   - `size_bytes`;
   - `created_at`.
-- [ ] Não exibir `storage_key`.
-- [ ] Não exibir caminho físico absoluto ou relativo.
-- [ ] Não exibir SHA-256.
-- [ ] Não exibir conteúdo documental.
-- [ ] Não acessar diretamente PostgreSQL.
-- [ ] Não acessar diretamente `data/private`.
-- [ ] Não importar adapters, sessões ou serviços internos na interface.
-- [ ] Usar `API_BASE_URL` como fronteira de comunicação.
-- [ ] Utilizar timeouts finitos nas chamadas HTTP.
-- [ ] Tratar falhas de conexão e timeout.
-- [ ] Traduzir respostas conhecidas para mensagens estáveis na interface.
-- [ ] Não exibir `response.text` diretamente.
-- [ ] Não exibir traces ou detalhes internos.
-- [ ] Renderizar títulos, nomes de arquivos e mensagens como texto seguro.
-- [ ] Não usar `unsafe_allow_html=True` com dados controlados pelo usuário ou pela API.
-- [ ] Não registrar conteúdo documental em logs.
-- [ ] Não manter bytes documentais em estado persistente da aplicação.
-- [ ] Criar testes automatizados da comunicação HTTP da interface.
-- [ ] Criar testes automatizados dos principais estados da interface.
-- [ ] Validar o fluxo no Docker Compose.
-- [ ] Preservar todos os Quality Gates existentes.
-- [ ] Manter o processamento externo desabilitado.
-- [ ] Usar exclusivamente dados e PDFs sintéticos nos testes.
+- [x] Não exibir `storage_key`.
+- [x] Não exibir caminho físico absoluto ou relativo.
+- [x] Não exibir SHA-256.
+- [x] Não exibir conteúdo documental.
+- [x] Não acessar diretamente PostgreSQL.
+- [x] Não acessar diretamente `data/private`.
+- [x] Não importar adapters, sessões ou serviços internos na interface.
+- [x] Usar `API_BASE_URL` como fronteira de comunicação.
+- [x] Utilizar timeouts finitos nas chamadas HTTP.
+- [x] Tratar falhas de conexão e timeout.
+- [x] Traduzir respostas conhecidas para mensagens estáveis na interface.
+- [x] Não exibir `response.text` diretamente.
+- [x] Não exibir traces ou detalhes internos.
+- [x] Renderizar títulos, nomes de arquivos e mensagens como texto seguro.
+- [x] Não usar `unsafe_allow_html=True` com dados controlados pelo usuário ou pela API.
+- [x] Não registrar conteúdo documental em logs.
+- [x] Não manter bytes documentais em estado persistente da aplicação.
+- [x] Criar testes automatizados da comunicação HTTP da interface.
+- [x] Criar testes automatizados dos principais estados da interface.
+- [x] Validar o fluxo no Docker Compose.
+- [x] Preservar todos os Quality Gates existentes.
+- [x] Manter o processamento externo desabilitado.
+- [x] Usar exclusivamente dados e PDFs sintéticos nos testes.
 
 ### 4.2 Fora do escopo — OUT
 
@@ -650,3 +650,56 @@ e do commit deste Feature Intent e do Action Plan correspondente.
 - [x] **Human Lead Engineer aprovou este Feature Intent**
 - **Data da aprovação:** 2026-07-31
 - **Observações:** Aprovado sem pendências bloqueantes.
+
+---
+
+## 17. Encerramento
+
+- **Status final:** Done
+- **Data do encerramento:** 2026-07-31
+- **Checkpoint H1:** aprovado pelo Human Lead Engineer em 2026-07-31
+- **Checkpoint H2:** aprovado pelo Human Lead Engineer em 2026-07-31
+- **Commit da implementação:** `75a8ddbd9f7a9dac68efac166935bac2a736d3f9`
+- **Commit documental:** registrado pelo commit de encerramento desta atualização.
+
+### Evidências consolidadas
+
+- 356 testes aprovados na suíte completa;
+- testes específicos da interface e integração aprovados;
+- Ruff aprovado;
+- mypy aprovado em `src` e `ui`;
+- verificação de escopo I-001 aprovada;
+- `git diff --check` aprovado;
+- PostgreSQL operacional;
+- migration `0002_add_documents (head)`;
+- health da FastAPI aprovado;
+- health do Streamlit aprovado;
+- integração Streamlit → FastAPI validada;
+- criação, seleção, upload, listagem e duplicidade validados;
+- smoke visual e operacional concluídos;
+- somente os seis campos documentais públicos exibidos;
+- nenhum documento real utilizado;
+- nenhum PDF rastreado pelo Git;
+- nenhum resíduo sintético no PostgreSQL ou storage privado;
+- superfície de implementação limitada aos nove arquivos autorizados;
+- arquivos protegidos preservados;
+- processamento externo mantido desabilitado.
+
+### Ocorrências tratadas durante a validação
+
+O smoke visual identificou incompatibilidade de importação do entrypoint no
+container Streamlit. O bootstrap da raiz do projeto foi corrigido em
+`ui/app.py` e protegido por teste arquitetural.
+
+O uso depreciado de `use_container_width` foi substituído por
+`width="stretch"`.
+
+Permanece somente o warning externo conhecido da integração
+Starlette/TestClient com `httpx`. O warning não foi introduzido pela F01.7,
+não causou falhas e está fora da superfície aprovada.
+
+### Resultado
+
+A intenção definida neste documento foi atendida sem expansão de escopo. A
+interface depende exclusivamente da API HTTP local e não acessa diretamente
+PostgreSQL, storage, serviços de aplicação ou infraestrutura.

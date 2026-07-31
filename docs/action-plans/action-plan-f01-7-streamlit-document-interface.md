@@ -11,10 +11,10 @@
 - **Baseline de planejamento:** `c36c4e3bbc46c7f56fee4fbc2874d36c1dd46112`
 - **Commit do Feature Intent aprovado:**
   `c36c4e3bbc46c7f56fee4fbc2874d36c1dd46112`
-- **Commit da implementação:** pendente
+- **Commit da implementação:** `75a8ddbd9f7a9dac68efac166935bac2a736d3f9`
 - **Data:** 2026-07-31
 - **Responsável humano:** André Cataldo
-- **Status:** Approved
+- **Status:** Done
 
 ### Dependências funcionais
 
@@ -576,11 +576,14 @@ integração real e do smoke operacional.
 
 ### Registro
 
-- **Status:** Pending
-- **Aprovado por:** pendente
-- **Data:** pendente
-- **Pendências:** pendente
-- **Evidências:** pendente
+- **Status:** Approved
+- **Aprovado por:** André Cataldo — Human Lead Engineer
+- **Data:** 2026-07-31
+- **Pendências:** nenhuma pendência bloqueante
+- **Evidências:** 113 testes específicos e 353 testes totais aprovados; Ruff,
+  mypy em `src` e `ui`, I-001 e `git diff --check` aprovados; isolamento
+  arquitetural, superfície autorizada, ausência de PDFs e staging vazio
+  confirmados.
 
 ---
 
@@ -617,7 +620,7 @@ curl -fsS http://localhost:8501/_stcore/health
 - UI operacional;
 - processamento externo desabilitado.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -647,7 +650,7 @@ git diff --check
 - modelos e lifecycle testados;
 - arquitetura preservada.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -675,7 +678,7 @@ git diff --check
 - mensagens sanitizadas;
 - nenhum body bruto.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -704,7 +707,7 @@ git diff --check
 - nenhum byte no estado;
 - nenhum HTML inseguro.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -738,7 +741,7 @@ git diff --check
 - `response.text` removido;
 - nenhum traceback público.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -767,7 +770,7 @@ git diff --check
 - nova avaliação selecionada;
 - seleção inválida descartada.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -803,7 +806,7 @@ git diff --check
 - erro sem reenvio;
 - nenhum byte em estado.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -831,7 +834,7 @@ git diff --check
 - ordem preservada;
 - nenhum campo interno.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -863,7 +866,7 @@ git diff --check
 - backend preservado;
 - suíte e gates aprovados.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -878,7 +881,7 @@ git diff --check
 - nenhum commit de implementação;
 - aprovação humana explícita.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -903,7 +906,7 @@ git diff --check
 - duplicidade e isolamento aprovados;
 - zero resíduos.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -931,7 +934,7 @@ Smoke humano com PDF sintético:
 9. limpar banco e arquivo;
 10. confirmar zero resíduos.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -964,7 +967,7 @@ curl -fsS http://localhost:8501/_stcore/health
 - nenhum HTML inseguro ou body bruto;
 - containers, migration e health aprovados.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -978,7 +981,7 @@ curl -fsS http://localhost:8501/_stcore/health
 - nenhum commit de implementação;
 - aprovação humana explícita.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -1008,7 +1011,7 @@ git push   origin   feature/f01-secure-document-ingestion
 - nenhum documento de governança;
 - branch sincronizada.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -1035,7 +1038,7 @@ git push   origin   feature/f01-secure-document-ingestion
 - working tree limpa;
 - sincronização `0 0`.
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -1079,11 +1082,50 @@ Executar após integração, Docker, smoke, Quality Gate e validação de resíd
 
 ### Registro
 
-- **Status:** Pending
-- **Aprovado por:** pendente
-- **Data:** pendente
-- **Pendências:** pendente
-- **Evidências:** pendente
+- **Status:** Approved
+- **Aprovado por:** André Cataldo — Human Lead Engineer
+- **Data:** 2026-07-31
+- **Pendências:** nenhuma pendência bloqueante
+- **Evidências:** 356 testes totais aprovados; testes específicos e integração
+  real aprovados; Ruff, mypy em `src` e `ui`, I-001 e `git diff --check`
+  aprovados; PostgreSQL, migration, API, Streamlit, smoke HTTP e smoke visual
+  aprovados; zero resíduos sintéticos; implementação registrada no commit
+  `75a8ddbd9f7a9dac68efac166935bac2a736d3f9`.
+
+---
+
+## 7.1 Resultado Final da Execução
+
+- **Data de conclusão:** 2026-07-31
+- **Implementação:** concluída
+- **Checkpoint H1:** aprovado
+- **Checkpoint H2:** aprovado
+- **Commit da implementação:** `75a8ddbd9f7a9dac68efac166935bac2a736d3f9`
+- **Superfície implementada:** nove arquivos autorizados
+- **Suíte final:** 356 testes aprovados
+- **Ruff:** aprovado
+- **mypy `src`:** aprovado em 31 arquivos
+- **mypy `ui`:** aprovado em 4 arquivos
+- **I-001:** aprovado
+- **Migration:** `0002_add_documents (head)`
+- **FastAPI:** saudável
+- **Streamlit:** saudável
+- **Processamento externo:** desabilitado
+- **PDFs rastreados:** nenhum
+- **Dados privados adicionais:** nenhum
+- **Resíduos sintéticos:** zero
+- **Expansão de escopo:** nenhuma
+- **Arquivos protegidos alterados:** nenhum
+
+O defeito de resolução do pacote `ui` no entrypoint do container foi
+identificado pelo smoke visual, corrigido dentro da superfície aprovada e
+coberto por teste arquitetural.
+
+O parâmetro depreciado `use_container_width` foi substituído por
+`width="stretch"`.
+
+O único warning remanescente pertence à integração externa
+Starlette/TestClient com `httpx` e não bloqueou os Quality Gates.
 
 ---
 

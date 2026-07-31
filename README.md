@@ -7,9 +7,10 @@ rastreabilidade, confidencialidade e responsabilidade humana.
 > **Estado atual:** Iteração I-001 — Fundação Técnica e Ingestão Documental
 > Local.
 >
-> **F01.1 a F01.6 concluídas.** O backend já cria e lista avaliações, recebe,
-> valida, armazena e lista documentos. A F01.7 — Interface Streamlit para
-> Upload e Listagem Segura de Documentos — é o próximo incremento.
+> **F01.1 a F01.7 concluídas.** O backend cria e lista avaliações, recebe,
+> valida, armazena e lista documentos. A interface Streamlit permite criar ou
+> selecionar uma avaliação, enviar um PDF e consultar os documentos associados
+> utilizando exclusivamente a FastAPI local.
 >
 > Nesta iteração não há LLM, RAG, embeddings, OCR, avaliação automática ou
 > processamento externo.
@@ -36,16 +37,19 @@ rastreabilidade, confidencialidade e responsabilidade humana.
 | F01.4 | Orquestração segura do upload e persistência | Concluído |
 | F01.5 | Endpoint seguro de upload | Concluído |
 | F01.6 | Endpoint seguro de listagem | Concluído |
-| F01.7 | Interface Streamlit para upload e listagem | Próximo |
+| F01.7 | Interface Streamlit para upload e listagem | Concluído |
 
-Último baseline validado da F01.6:
+Último baseline validado da F01.7:
 
-- 240 testes aprovados;
+- implementação registrada em `75a8ddbd9f7a9dac68efac166935bac2a736d3f9`;
+- 356 testes aprovados;
 - Ruff aprovado;
-- mypy aprovado;
+- mypy aprovado em `src` e `ui`;
 - verificação de escopo I-001 aprovada;
 - PostgreSQL e migration `0002_add_documents (head)` operacionais;
-- health e OpenAPI aprovados;
+- health da API e do Streamlit aprovados;
+- integração e smoke operacional aprovados;
+- nenhum PDF ou dado privado adicional rastreado;
 - processamento externo desabilitado.
 
 ## Funcionalidades disponíveis
@@ -71,15 +75,24 @@ rastreabilidade, confidencialidade e responsabilidade humana.
 
 ### Interface
 
-A interface Streamlit atual:
+A interface Streamlit:
 
 - verifica o health da API;
-- informa se o processamento externo está habilitado;
-- permite criar avaliações;
-- lista avaliações existentes.
-
-O upload e a listagem documental na interface pertencem à F01.7 e ainda não
-devem ser considerados concluídos.
+- bloqueia a jornada quando o processamento externo está habilitado;
+- consulta os perfis de avaliação;
+- cria avaliações;
+- lista avaliações existentes;
+- seleciona uma avaliação por título e UUID completo;
+- mantém a seleção durante reruns legítimos;
+- aceita um PDF por submissão explícita;
+- impede reenvio automático durante reruns;
+- invalida o uploader após upload bem-sucedido;
+- lista os documentos da avaliação selecionada;
+- diferencia lista vazia de falha de carregamento;
+- apresenta mensagens públicas sanitizadas;
+- exibe somente os seis metadados documentais públicos;
+- consome exclusivamente a FastAPI local;
+- não acessa diretamente PostgreSQL ou `data/private`.
 
 ## Arquitetura
 
@@ -193,6 +206,7 @@ Execute os gates:
 pytest
 ruff check .
 mypy src
+mypy ui
 ./scripts/verify_i001_scope.sh
 git diff --check
 ```
@@ -265,19 +279,23 @@ Feature Intent
 Nenhum código de uma nova feature deve ser alterado antes da aprovação e do
 commit de seus artefatos de governança.
 
-## Próximo incremento
+## Situação após a F01.7
 
-**F01.7 — Interface Streamlit para Upload e Listagem Segura de Documentos**
+A F01 — Ingestão Segura de Documentos está concluída até a interface
+operacional de upload e listagem.
 
-Objetivo:
+O próximo incremento deverá ser definido por novo fluxo de governança:
 
-- selecionar uma avaliação;
-- enviar um PDF por ação explícita;
-- listar os documentos associados;
-- apresentar mensagens públicas sanitizadas;
-- consumir somente a FastAPI;
-- não acessar diretamente PostgreSQL ou `data/private`;
-- impedir upload duplicado causado por reruns do Streamlit.
+~~~text
+Feature Intent
+    -> aprovação humana
+    -> commit documental
+    -> Action Plan
+    -> aprovação humana
+    -> commit documental
+    -> implementação
+~~~
 
 Extração de texto, tabelas, OCR, embeddings, RAG, LLM e análise de mérito
-continuam fora do escopo da I-001.
+continuam fora do escopo da I-001 até que sejam explicitamente planejados e
+aprovados.
