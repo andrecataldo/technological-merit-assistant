@@ -46,6 +46,24 @@
 - Nenhuma Decision Lock precisa ser alterada.
 - Working tree limpa e branch sincronizada no início do planejamento.
 
+## 2.1 Correção de Superfície após a Etapa 1
+
+A verificação do baseline identificou que a extensão estrutural de
+`DocumentPersistence` também afeta dois fakes existentes usados na regressão do
+upload:
+
+- `FakeUploadPersistence`, em `tests/test_document_upload_service.py`;
+- `FailingCommitPersistence`, em
+  `tests/test_document_upload_integration.py`.
+
+Esses fakes deverão implementar `list_by_evaluation` exclusivamente para
+continuarem estruturalmente compatíveis com a porta.
+
+A operação não será chamada pelo fluxo de upload e não alterará o comportamento
+da F01.4 ou da F01.5.
+
+Nenhum arquivo de produção adicional foi incluído na superfície.
+
 ---
 
 ## 3.1 Objetivo
@@ -142,7 +160,9 @@ Locks ou isolamento adicional permanecem fora do escopo.
 ### Testes — alterar
 
 - `tests/test_document_persistence_contract.py`;
-- `tests/test_sqlalchemy_document_persistence.py`.
+- `tests/test_sqlalchemy_document_persistence.py`;
+- `tests/test_document_upload_service.py`;
+- `tests/test_document_upload_integration.py`.
 
 ### Documentação
 
@@ -451,6 +471,25 @@ Criar `tests/test_document_listing_api.py` para cobrir:
 - GET sem body;
 - POST preservado.
 
+### Compatibilidade Estrutural com o Upload
+
+Atualizar os fakes existentes sem alterar os casos de uso de upload:
+
+- `FakeUploadPersistence` deverá implementar `list_by_evaluation`;
+- a implementação deverá retornar uma coleção vazia;
+- a operação não deverá ser chamada pelos testes do upload;
+- `ConfigurableUploadPersistence` herdará a operação;
+- `FailingCommitPersistence` deverá delegar `list_by_evaluation` ao adapter;
+- nenhum teste existente de upload deverá mudar de resultado;
+- `DocumentUploadService` não será alterado.
+
+Executar integralmente:
+
+- `tests/test_document_upload_service.py`;
+- `tests/test_document_upload_integration.py`;
+- `tests/test_document_upload_api.py`;
+- `tests/test_document_upload_api_integration.py`.
+
 ### Integração
 
 Criar `tests/test_document_listing_api_integration.py` usando:
@@ -743,12 +782,14 @@ Executar todos os testes unitários e de contrato da F01.6 antes do H1.
 - `tests/test_sqlalchemy_document_persistence.py`;
 - `tests/test_document_listing_service.py`;
 - `tests/test_document_listing_api.py`;
+- `tests/test_document_upload_service.py`;
+- `tests/test_document_upload_integration.py`;
 
 **Verificação**
 
 ```bash
 pytest   tests/test_document_persistence_contract.py   tests/test_sqlalchemy_document_persistence.py   tests/test_document_listing_service.py   tests/test_document_listing_api.py   -q
-pytest tests/test_document_upload_api.py -q
+pytest   tests/test_document_upload_service.py   tests/test_document_upload_integration.py   tests/test_document_upload_api.py   tests/test_document_upload_api_integration.py   -q
 pytest tests/test_health.py -q
 ruff check src tests
 mypy src
@@ -951,7 +992,7 @@ Após H2, criar staging seletivo, commit e push.
 **Verificação**
 
 ```bash
-git add --   src/merit_assistant/application/ports/document_persistence.py   src/merit_assistant/application/services/__init__.py   src/merit_assistant/application/services/document_listing.py   src/merit_assistant/infrastructure/db/document_persistence.py   src/merit_assistant/api/dependencies.py   src/merit_assistant/api/routes/documents.py   tests/test_document_persistence_contract.py   tests/test_sqlalchemy_document_persistence.py   tests/test_document_listing_service.py   tests/test_document_listing_api.py   tests/test_document_listing_api_integration.py
+git add --   src/merit_assistant/application/ports/document_persistence.py   src/merit_assistant/application/services/__init__.py   src/merit_assistant/application/services/document_listing.py   src/merit_assistant/infrastructure/db/document_persistence.py   src/merit_assistant/api/dependencies.py   src/merit_assistant/api/routes/documents.py   tests/test_document_persistence_contract.py   tests/test_sqlalchemy_document_persistence.py   tests/test_document_listing_service.py   tests/test_document_listing_api.py   tests/test_document_listing_api_integration.py   tests/test_document_upload_service.py   tests/test_document_upload_integration.py
 git commit -m "feat: add secure document listing endpoint"
 git push origin feature/f01-secure-document-ingestion
 ```
@@ -1160,4 +1201,4 @@ A F01.6 estará concluída quando:
 
 - [x] **Human Lead Engineer aprovou este Action Plan**
 - **Data da aprovação:** 2026-07-30
-- **Observações:** Aprovado sem pendências bloqueantes. A tradução de erros SQLAlchemy permanece responsabilidade exclusiva do adapter de infraestrutura.
+- **Observações:** Action Plan corrigido aprovado. A superfície autorizada inclui os fakes de persistência dos testes de upload exclusivamente para compatibilidade estrutural com a porta atualizada.
