@@ -36,13 +36,24 @@ class FakeDatabaseError(Exception):
         self.diag = FakeDiagnostic(constraint_name)
 
 
+class FakeScalarResult:
+    def __init__(self, values: list[object]) -> None:
+        self._values = list(values)
+
+    def all(self) -> list[object]:
+        return list(self._values)
+
+
 class FakeSession:
     def __init__(self) -> None:
         self.scalar_results: list[object | None] = []
         self.scalar_statements: list[object] = []
+        self.scalars_results: list[list[object]] = []
+        self.scalars_statements: list[object] = []
         self.added_objects: list[object] = []
 
         self.scalar_error: SQLAlchemyError | None = None
+        self.scalars_error: SQLAlchemyError | None = None
         self.add_error: SQLAlchemyError | None = None
         self.commit_error: SQLAlchemyError | None = None
         self.rollback_error: SQLAlchemyError | None = None
@@ -61,6 +72,17 @@ class FakeSession:
             return None
 
         return self.scalar_results.pop(0)
+
+    def scalars(self, statement: object) -> FakeScalarResult:
+        self.scalars_statements.append(statement)
+
+        if self.scalars_error is not None:
+            raise self.scalars_error
+
+        if not self.scalars_results:
+            return FakeScalarResult([])
+
+        return FakeScalarResult(self.scalars_results.pop(0))
 
     def add(self, instance: object) -> None:
         if self.add_error is not None:
@@ -106,6 +128,19 @@ def make_document(
         size_bytes=2048,
         sha256="a" * 64,
         created_at=datetime(2026, 7, 28, 18, 0, tzinfo=UTC),
+    )
+
+
+def make_model(document: Document) -> DocumentModel:
+    return DocumentModel(
+        id=document.id,
+        evaluation_id=document.evaluation_id,
+        original_filename=document.original_filename,
+        storage_key=document.storage_key,
+        content_type=document.content_type,
+        size_bytes=document.size_bytes,
+        sha256=document.sha256,
+        created_at=document.created_at,
     )
 
 
@@ -166,6 +201,75 @@ def test_document_lookup_is_scoped_to_evaluation_and_sha256() -> None:
     assert "FROM documents" in sql
     assert "documents.evaluation_id =" in sql
     assert "documents.sha256 =" in sql
+
+
+def test_list_by_evaluation_returns_empty_tuple() -> None:
+    fake_session = FakeSession()
+    fake_session.scalars_results.append([])
+    persistence = make_persistence(fake_session)
+    evaluation_id = uuid4()
+
+    result = persistence.list_by_evaluation(evaluation_id)
+
+    assert result == ()
+    assert len(fake_session.scalars_statements) == 1
+    assert fake_session.commit_calls == 0
+    assert fake_session.rollback_calls == 0
+    assert fake_session.close_calls == 0
+
+
+def test_list_by_evaluation_filters_orders_and_maps_all_fields() -> None:
+    fake_session = FakeSession()
+    persistence = make_persistence(fake_session)
+    evaluation_id = uuid4()
+
+    first_document = make_document(
+        evaluation_id=evaluation_id,
+    )
+    second_document = make_document(
+        evaluation_id=evaluation_id,
+    )
+
+    fake_session.scalars_results.append(
+        [
+            make_model(first_document),
+            make_model(second_document),
+        ]
+    )
+
+    result = persistence.list_by_evaluation(evaluation_id)
+
+    assert result == (
+        first_document,
+        second_document,
+    )
+    assert len(fake_session.scalars_statements) == 1
+
+    sql = " ".join(str(fake_session.scalars_statements[0]).split())
+
+    assert "FROM documents" in sql
+    assert "documents.evaluation_id =" in sql
+    assert ("ORDER BY documents.created_at ASC, documents.id ASC") in sql
+
+    assert fake_session.commit_calls == 0
+    assert fake_session.rollback_calls == 0
+    assert fake_session.close_calls == 0
+
+
+def test_list_query_error_is_translated_and_preserves_cause() -> None:
+    fake_session = FakeSession()
+    original_error = SQLAlchemyError("synthetic list query failure")
+    fake_session.scalars_error = original_error
+    persistence = make_persistence(fake_session)
+
+    with pytest.raises(DocumentPersistenceError) as exc_info:
+        persistence.list_by_evaluation(uuid4())
+
+    assert str(exc_info.value) == ("document persistence operation failed")
+    assert exc_info.value.__cause__ is original_error
+    assert fake_session.commit_calls == 0
+    assert fake_session.rollback_calls == 0
+    assert fake_session.close_calls == 0
 
 
 def test_add_maps_every_document_field_without_changes() -> None:

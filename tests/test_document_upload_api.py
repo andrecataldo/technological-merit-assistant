@@ -454,7 +454,7 @@ def test_openapi_declares_multipart_post_and_public_schema() -> None:
     request_content = operation["requestBody"]["content"]
     response_schema = schema["components"]["schemas"]["DocumentUploadResponse"]
 
-    assert set(schema["paths"][path]) == {"post"}
+    assert set(schema["paths"][path]) == {"get", "post"}
     assert "multipart/form-data" in request_content
     assert "201" in operation["responses"]
     assert set(response_schema["properties"]) == PUBLIC_FIELDS

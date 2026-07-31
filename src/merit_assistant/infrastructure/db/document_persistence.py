@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
 from typing import NoReturn
 from uuid import UUID
 
@@ -57,6 +58,27 @@ class SqlAlchemyDocumentPersistence:
         except SQLAlchemyError as exc:
             self._raise_translated_error(exc)
 
+    def list_by_evaluation(
+        self,
+        evaluation_id: UUID,
+    ) -> Sequence[Document]:
+        """Return documents for one evaluation in deterministic order."""
+        statement = (
+            select(DocumentModel)
+            .where(DocumentModel.evaluation_id == evaluation_id)
+            .order_by(
+                DocumentModel.created_at.asc(),
+                DocumentModel.id.asc(),
+            )
+        )
+
+        try:
+            models = self._session.scalars(statement).all()
+        except SQLAlchemyError as exc:
+            self._raise_translated_error(exc)
+
+        return tuple(self._to_entity(model) for model in models)
+
     def add(self, document: Document) -> None:
         """Add document metadata to the current transaction."""
         model = DocumentModel(
@@ -88,6 +110,19 @@ class SqlAlchemyDocumentPersistence:
             self._session.rollback()
         except SQLAlchemyError as exc:
             self._raise_translated_error(exc)
+
+    @staticmethod
+    def _to_entity(model: DocumentModel) -> Document:
+        return Document(
+            id=model.id,
+            evaluation_id=model.evaluation_id,
+            original_filename=model.original_filename,
+            storage_key=model.storage_key,
+            content_type=model.content_type,
+            size_bytes=model.size_bytes,
+            sha256=model.sha256,
+            created_at=model.created_at,
+        )
 
     @classmethod
     def _raise_translated_error(

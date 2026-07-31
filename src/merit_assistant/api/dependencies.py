@@ -5,6 +5,9 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
+from merit_assistant.application.services.document_listing import (
+    DocumentListingService,
+)
 from merit_assistant.application.services.document_upload import (
     DocumentUploadService,
 )
@@ -26,6 +29,16 @@ from merit_assistant.infrastructure.storage.local_document_storage import (
 DatabaseSession = Annotated[Session, Depends(get_db_session)]
 
 
+def get_document_listing_service(
+    session: DatabaseSession,
+) -> DocumentListingService:
+    persistence = SqlAlchemyDocumentPersistence(session)
+
+    return DocumentListingService(
+        persistence=persistence,
+    )
+
+
 def get_document_upload_service(
     session: DatabaseSession,
 ) -> DocumentUploadService:
@@ -44,6 +57,11 @@ def get_document_upload_service(
         persistence=persistence,
     )
 
+
+DocumentListingServiceDependency = Annotated[
+    DocumentListingService,
+    Depends(get_document_listing_service),
+]
 
 DocumentUploadServiceDependency = Annotated[
     DocumentUploadService,

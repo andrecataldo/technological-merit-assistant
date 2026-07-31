@@ -320,6 +320,14 @@ class FakeUploadPersistence:
             sha256_value,
         ) in self.existing_documents
 
+    def list_by_evaluation(
+        self,
+        evaluation_id: UUID,
+    ) -> tuple[Document, ...]:
+        del evaluation_id
+        self.events.append("list_by_evaluation")
+        return ()
+
     def add(self, document: Document) -> None:
         self.events.append("add")
         self.added_documents.append(document)

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
 from typing import Protocol
 from uuid import UUID
 
@@ -31,6 +32,13 @@ class DocumentPersistence(Protocol):
         sha256: str,
     ) -> bool:
         """Return whether the document hash exists in the evaluation."""
+        ...
+
+    def list_by_evaluation(
+        self,
+        evaluation_id: UUID,
+    ) -> Sequence[Document]:
+        """Return documents for one evaluation in deterministic order."""
         ...
 
     def add(self, document: Document) -> None:

@@ -6,11 +6,16 @@ from uuid import UUID
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
 
 from merit_assistant.api.dependencies import (
+    DocumentListingServiceDependency,
     DocumentUploadServiceDependency,
 )
 from merit_assistant.api.schemas import DocumentUploadResponse
 from merit_assistant.application.ports.document_storage import (
     DocumentStorageError,
+)
+from merit_assistant.application.services.document_listing import (
+    DocumentListingEvaluationNotFoundError,
+    DocumentListingPersistenceError,
 )
 from merit_assistant.application.services.document_upload import (
     DocumentCompensationError,
@@ -30,6 +35,37 @@ from merit_assistant.application.services.document_validation import (
 )
 
 router = APIRouter(tags=["documents"])
+
+
+@router.get(
+    "/evaluations/{evaluation_id}/documents",
+    response_model=list[DocumentUploadResponse],
+    status_code=status.HTTP_200_OK,
+)
+def list_documents(
+    evaluation_id: UUID,
+    service: DocumentListingServiceDependency,
+) -> list[DocumentUploadResponse]:
+    try:
+        documents = service.list_for_evaluation(evaluation_id)
+    except DocumentListingEvaluationNotFoundError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Evaluation not found.",
+        ) from exc
+    except DocumentListingPersistenceError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Unable to list documents.",
+        ) from exc
+
+    return [
+        DocumentUploadResponse.model_validate(
+            document,
+            from_attributes=True,
+        )
+        for document in documents
+    ]
 
 
 @router.post(

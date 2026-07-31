@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import shutil
-from collections.abc import Iterator
+from collections.abc import Iterator, Sequence
 from datetime import UTC, datetime
 from hashlib import sha256
 from io import BytesIO
@@ -198,6 +198,14 @@ class FailingCommitPersistence:
         return self._delegate.exists_by_evaluation_and_sha256(
             evaluation_id,
             content_sha256,
+        )
+
+    def list_by_evaluation(
+        self,
+        evaluation_id: UUID,
+    ) -> Sequence[Document]:
+        return self._delegate.list_by_evaluation(
+            evaluation_id
         )
 
     def add(self, document: Document) -> None:

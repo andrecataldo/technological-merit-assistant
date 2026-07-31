@@ -1,3 +1,9 @@
+from merit_assistant.application.services.document_listing import (
+    DocumentListingError,
+    DocumentListingEvaluationNotFoundError,
+    DocumentListingPersistenceError,
+    DocumentListingService,
+)
 from merit_assistant.application.services.document_upload import (
     DocumentCompensationError,
     DocumentUploadError,
@@ -22,6 +28,10 @@ from merit_assistant.application.services.document_validation import (
 
 __all__ = [
     "DocumentCompensationError",
+    "DocumentListingError",
+    "DocumentListingEvaluationNotFoundError",
+    "DocumentListingPersistenceError",
+    "DocumentListingService",
     "DocumentTooLargeError",
     "DocumentUploadError",
     "DocumentUploadPersistenceError",
