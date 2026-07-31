@@ -64,6 +64,23 @@ da F01.4 ou da F01.5.
 
 Nenhum arquivo de produção adicional foi incluído na superfície.
 
+## 2.2 Correção de Superfície antes das Etapas 5 e 6
+
+A revisão dos testes HTTP existentes identificou que
+`tests/test_document_upload_api.py` contém uma asserção OpenAPI que exige que o
+path documental possua exclusivamente o método `post`.
+
+A introdução aprovada do método `get` exige atualizar essa asserção para
+preservar simultaneamente os contratos GET e POST.
+
+A alteração será limitada ao teste OpenAPI:
+
+- o path deverá conter `get` e `post`;
+- todas as verificações de multipart, resposta `201` e schema público do upload
+  serão preservadas;
+- nenhum comportamento da F01.5 será alterado;
+- nenhum arquivo de produção adicional foi incluído na superfície.
+
 ---
 
 ## 3.1 Objetivo
@@ -162,7 +179,8 @@ Locks ou isolamento adicional permanecem fora do escopo.
 - `tests/test_document_persistence_contract.py`;
 - `tests/test_sqlalchemy_document_persistence.py`;
 - `tests/test_document_upload_service.py`;
-- `tests/test_document_upload_integration.py`.
+- `tests/test_document_upload_integration.py`;
+- `tests/test_document_upload_api.py`.
 
 ### Documentação
 
@@ -469,7 +487,9 @@ Criar `tests/test_document_listing_api.py` para cobrir:
 - dependência por request;
 - OpenAPI com GET e POST;
 - GET sem body;
-- POST preservado.
+- POST preservado;
+- asserção OpenAPI existente da F01.5 atualizada sem remover suas
+  verificações de upload.
 
 ### Compatibilidade Estrutural com o Upload
 
@@ -748,12 +768,13 @@ Adicionar a listagem ao router documental existente.
 
 - `src/merit_assistant/api/routes/documents.py`;
 - `tests/test_document_listing_api.py`;
+- `tests/test_document_upload_api.py`;
 
 **Verificação**
 
 ```bash
-pytest tests/test_document_listing_api.py -q
-ruff check   src/merit_assistant/api/routes/documents.py   tests/test_document_listing_api.py
+pytest tests/test_document_listing_api.py tests/test_document_upload_api.py -q
+ruff check   src/merit_assistant/api/routes/documents.py   tests/test_document_listing_api.py   tests/test_document_upload_api.py
 mypy src
 git diff --check
 ```
@@ -784,6 +805,7 @@ Executar todos os testes unitários e de contrato da F01.6 antes do H1.
 - `tests/test_document_listing_api.py`;
 - `tests/test_document_upload_service.py`;
 - `tests/test_document_upload_integration.py`;
+- `tests/test_document_upload_api.py`;
 
 **Verificação**
 
@@ -992,7 +1014,7 @@ Após H2, criar staging seletivo, commit e push.
 **Verificação**
 
 ```bash
-git add --   src/merit_assistant/application/ports/document_persistence.py   src/merit_assistant/application/services/__init__.py   src/merit_assistant/application/services/document_listing.py   src/merit_assistant/infrastructure/db/document_persistence.py   src/merit_assistant/api/dependencies.py   src/merit_assistant/api/routes/documents.py   tests/test_document_persistence_contract.py   tests/test_sqlalchemy_document_persistence.py   tests/test_document_listing_service.py   tests/test_document_listing_api.py   tests/test_document_listing_api_integration.py   tests/test_document_upload_service.py   tests/test_document_upload_integration.py
+git add --   src/merit_assistant/application/ports/document_persistence.py   src/merit_assistant/application/services/__init__.py   src/merit_assistant/application/services/document_listing.py   src/merit_assistant/infrastructure/db/document_persistence.py   src/merit_assistant/api/dependencies.py   src/merit_assistant/api/routes/documents.py   tests/test_document_persistence_contract.py   tests/test_sqlalchemy_document_persistence.py   tests/test_document_listing_service.py   tests/test_document_listing_api.py   tests/test_document_listing_api_integration.py   tests/test_document_upload_service.py   tests/test_document_upload_integration.py   tests/test_document_upload_api.py
 git commit -m "feat: add secure document listing endpoint"
 git push origin feature/f01-secure-document-ingestion
 ```
@@ -1201,4 +1223,4 @@ A F01.6 estará concluída quando:
 
 - [x] **Human Lead Engineer aprovou este Action Plan**
 - **Data da aprovação:** 2026-07-30
-- **Observações:** Action Plan corrigido aprovado. A superfície autorizada inclui os fakes de persistência dos testes de upload exclusivamente para compatibilidade estrutural com a porta atualizada.
+- **Observações:** Segunda correção aprovada. `tests/test_document_upload_api.py` integra a superfície exclusivamente para preservar o contrato OpenAPI da F01.5 com a coexistência dos métodos GET e POST.
