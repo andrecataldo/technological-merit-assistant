@@ -6,9 +6,10 @@
 - **Feature pai:** F01 — Ingestão Segura de Documentos
 - **Autor — Human Lead Engineer:** André Cataldo
 - **Data:** 2026-07-30
-- **Status:** Approved
+- **Status:** Done
 - **Branch:** `feature/f01-secure-document-ingestion`
 - **Baseline:** `408fdfab61ac817c9d91ac7cb421d1adfdb3a9a1`
+- **Commit da implementação:** `270c3caf171e9be4e4754c250a0f30d930e39603`
 - **MCP+ aplicável:** MCP+ 001 v1.1
 - **Dependências funcionais:**
   - F01.1 — Modelo de Documento e Migration;
@@ -65,41 +66,41 @@ A listagem deverá:
 
 ### 4.1 Dentro do escopo — IN
 
-- [ ] Criar `GET /evaluations/{evaluation_id}/documents`.
-- [ ] Receber `evaluation_id` como UUID no path.
-- [ ] Confirmar a existência da avaliação.
-- [ ] Retornar HTTP `404 Not Found` para avaliação inexistente.
-- [ ] Retornar HTTP `200 OK` para avaliação existente.
-- [ ] Retornar lista vazia quando a avaliação não possuir documentos.
-- [ ] Listar somente documentos cujo `evaluation_id` corresponda ao path.
-- [ ] Definir ordenação determinística por `created_at` e `id`.
-- [ ] Retornar, para cada documento, somente:
+- [x] Criar `GET /evaluations/{evaluation_id}/documents`.
+- [x] Receber `evaluation_id` como UUID no path.
+- [x] Confirmar a existência da avaliação.
+- [x] Retornar HTTP `404 Not Found` para avaliação inexistente.
+- [x] Retornar HTTP `200 OK` para avaliação existente.
+- [x] Retornar lista vazia quando a avaliação não possuir documentos.
+- [x] Listar somente documentos cujo `evaluation_id` corresponda ao path.
+- [x] Definir ordenação determinística por `created_at` e `id`.
+- [x] Retornar, para cada documento, somente:
   - `id`;
   - `evaluation_id`;
   - `original_filename`;
   - `content_type`;
   - `size_bytes`;
   - `created_at`.
-- [ ] Não retornar `storage_key`.
-- [ ] Não retornar caminho físico absoluto ou relativo.
-- [ ] Não retornar SHA-256.
-- [ ] Não retornar conteúdo documental.
-- [ ] Não acessar o arquivo no storage durante a listagem.
-- [ ] Criar ou reutilizar schema público documental.
-- [ ] Criar caso de uso explícito para listagem.
-- [ ] Estender a porta de persistência somente com as operações necessárias.
-- [ ] Implementar a consulta no adapter SQLAlchemy.
-- [ ] Utilizar a sessão PostgreSQL administrada pelo request.
-- [ ] Traduzir falhas conhecidas para respostas HTTP estáveis.
-- [ ] Manter mensagens públicas sanitizadas.
-- [ ] Criar testes unitários do caso de uso e da camada HTTP.
-- [ ] Criar testes de contrato do adapter de persistência.
-- [ ] Criar testes integrados com PostgreSQL real.
-- [ ] Confirmar isolamento entre avaliações.
-- [ ] Confirmar ausência de leitura do storage.
-- [ ] Manter os Quality Gates existentes aprovados.
-- [ ] Manter o processamento externo desabilitado.
-- [ ] Usar somente dados e identificadores sintéticos nos testes.
+- [x] Não retornar `storage_key`.
+- [x] Não retornar caminho físico absoluto ou relativo.
+- [x] Não retornar SHA-256.
+- [x] Não retornar conteúdo documental.
+- [x] Não acessar o arquivo no storage durante a listagem.
+- [x] Criar ou reutilizar schema público documental.
+- [x] Criar caso de uso explícito para listagem.
+- [x] Estender a porta de persistência somente com as operações necessárias.
+- [x] Implementar a consulta no adapter SQLAlchemy.
+- [x] Utilizar a sessão PostgreSQL administrada pelo request.
+- [x] Traduzir falhas conhecidas para respostas HTTP estáveis.
+- [x] Manter mensagens públicas sanitizadas.
+- [x] Criar testes unitários do caso de uso e da camada HTTP.
+- [x] Criar testes de contrato do adapter de persistência.
+- [x] Criar testes integrados com PostgreSQL real.
+- [x] Confirmar isolamento entre avaliações.
+- [x] Confirmar ausência de leitura do storage.
+- [x] Manter os Quality Gates existentes aprovados.
+- [x] Manter o processamento externo desabilitado.
+- [x] Usar somente dados e identificadores sintéticos nos testes.
 
 ### 4.2 Fora do escopo — OUT
 
@@ -351,4 +352,4 @@ e do commit do Action Plan.
 
 - [x] **Human Lead Engineer aprovou este Feature Intent**
 - **Data da aprovação:** 2026-07-30
-- **Observações:** Aprovado sem pendências bloqueantes.
+- **Observações:** Feature concluída em 2026-07-30, sem pendências bloqueantes. Implementação registrada no commit `270c3caf171e9be4e4754c250a0f30d930e39603`. Quality Gate final: 240 testes aprovados, Ruff, mypy, I-001, PostgreSQL, containers, health e OpenAPI aprovados.

@@ -10,9 +10,10 @@
 - **Branch:** `feature/f01-secure-document-ingestion`
 - **Baseline de planejamento:** `c65fea5792f182726cae796ddaacc6efa1c44cf1`
 - **Commit do Feature Intent aprovado:** `c65fea5792f182726cae796ddaacc6efa1c44cf1`
+- **Commit da implementação:** `270c3caf171e9be4e4754c250a0f30d930e39603`
 - **Data:** 2026-07-30
 - **Responsável humano:** André Cataldo
-- **Status:** Approved
+- **Status:** Done
 
 ### Dependências funcionais
 
@@ -577,11 +578,11 @@ Executar após produção e testes unitários, antes dos testes integrados.
 
 ### Registro
 
-- **Status:** Pending
-- **Aprovado por:** pendente
-- **Data:** pendente
-- **Pendências:** pendente
-- **Evidências:** pendente
+- **Status:** Approved
+- **Aprovado por:** André Cataldo
+- **Data:** 2026-07-30
+- **Pendências:** Nenhuma.
+- **Evidências:** 236 testes aprovados; Ruff, mypy, I-001 e `git diff --check` aprovados; superfície autorizada de 13 arquivos; staging vazio; sincronização `0 0`; patch H1 SHA-256 `d022556f0d3cf18e3a8b1824f0f499120d8e774338b8a3eb72441b9f66867567`; nenhum commit de implementação antes da aprovação.
 
 ---
 
@@ -626,7 +627,7 @@ curl -fsS http://localhost:8000/health
 - gates aprovados;
 - migration e health aprovados;
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -657,7 +658,7 @@ git diff --check
 - nenhum import SQLAlchemy na porta;
 - operações existentes preservadas;
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -689,7 +690,7 @@ git diff --check
 - erros traduzidos;
 - nenhum controle de transação na leitura;
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -722,7 +723,7 @@ git diff --check
 - nenhum storage;
 - nenhum commit, rollback ou close;
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -754,7 +755,7 @@ git diff --check
 - nenhum storage;
 - dependência sobrescrevível;
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -787,7 +788,7 @@ git diff --check
 - schema seguro;
 - nenhuma leitura de storage;
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -826,7 +827,7 @@ git diff --check
 - health preservado;
 - gates locais aprovados;
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -858,7 +859,7 @@ git diff --check
 - nenhum commit de implementação;
 - aprovação humana explícita;
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -890,7 +891,7 @@ git diff --check
 - nenhum arquivo criado ou lido;
 - zero resíduos;
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -922,7 +923,7 @@ curl -fsS http://localhost:8000/health
 - GET e POST presentes no OpenAPI;
 - GET sem body e POST multipart preservado;
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -963,7 +964,7 @@ curl -fsS http://localhost:8000/health
 - nenhum resíduo;
 - containers, migration e health aprovados;
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -997,7 +998,7 @@ git diff --check
 - nenhum commit de implementação;
 - aprovação humana explícita;
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -1025,7 +1026,7 @@ git push origin feature/f01-secure-document-ingestion
 - nenhum documento de governança;
 - branch sincronizada;
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -1057,7 +1058,7 @@ git push origin feature/f01-secure-document-ingestion
 - commit documental separado;
 - working tree limpa e sincronização `0 0`;
 
-**Status:** Pending
+**Status:** Done
 
 ---
 
@@ -1096,11 +1097,11 @@ validação de resíduos; executar antes do staging e commit de implementação.
 
 ### Registro
 
-- **Status:** Pending
-- **Aprovado por:** pendente
-- **Data:** pendente
-- **Pendências:** pendente
-- **Evidências:** pendente
+- **Status:** Approved
+- **Aprovado por:** André Cataldo
+- **Data:** 2026-07-30
+- **Pendências:** Nenhuma.
+- **Evidências:** 240 testes aprovados; 40 testes específicos da F01.6; 76 testes de regressão da F01.5; Ruff, mypy, I-001 e `git diff --check` aprovados; superfície autorizada de 14 arquivos; PostgreSQL, containers, migration, health e OpenAPI aprovados; zero resíduos; patch H2 SHA-256 `954e57b1b597fafe07e5605ce93a64daa593a95cd3fb352f6b75d514a23d8aba`; commit da implementação autorizado e registrado em `270c3caf171e9be4e4754c250a0f30d930e39603`.
 
 ---
 
@@ -1223,4 +1224,4 @@ A F01.6 estará concluída quando:
 
 - [x] **Human Lead Engineer aprovou este Action Plan**
 - **Data da aprovação:** 2026-07-30
-- **Observações:** Segunda correção aprovada. `tests/test_document_upload_api.py` integra a superfície exclusivamente para preservar o contrato OpenAPI da F01.5 com a coexistência dos métodos GET e POST.
+- **Observações:** Action Plan concluído em 2026-07-30, sem pendências. H1 e H2 aprovados. Implementação registrada no commit `270c3caf171e9be4e4754c250a0f30d930e39603`. Os itens OUT, componentes protegidos e limites do MCP+ 001 v1.1 foram preservados.
