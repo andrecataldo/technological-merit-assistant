@@ -8,13 +8,55 @@ on:
 jobs:
   quality:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: merit_assistant
+          POSTGRES_USER: merit
+          POSTGRES_PASSWORD: merit
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U merit -d merit_assistant"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql+psycopg://merit:merit@localhost:5432/merit_assistant
+      PRIVATE_DATA_DIR: ${{ github.workspace }}/data/private
+      EXTERNAL_PROCESSING_ENABLED: "false"
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
-      - run: pip install -e '.[dev]'
-      - run: ruff check .
-      - run: mypy src
-      - run: pytest
+
+      - name: Install dependencies
+        run: pip install -e '.[dev]'
+
+      - name: Apply database migrations
+        run: alembic upgrade head
+
+      - name: Ruff
+        run: ruff check .
+
+      - name: Mypy backend
+        run: mypy src
+
+      - name: Mypy interface
+        run: mypy ui
+
+      - name: Verify I-001 scope
+        run: ./scripts/verify_i001_scope.sh
+
+      - name: Check Git whitespace
+        run: git diff --check
+
+      - name: Tests
+        run: pytest

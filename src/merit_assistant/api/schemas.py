@@ -28,3 +28,12 @@ class EvaluationResponse(BaseModel):
     title: str
     profile_id: str
     created_at: datetime
+
+
+class DocumentUploadResponse(BaseModel):
+    id: UUID
+    evaluation_id: UUID
+    original_filename: str
+    content_type: str
+    size_bytes: int
+    created_at: datetime
